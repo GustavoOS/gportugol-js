@@ -5,6 +5,7 @@ NUMERO_OCTAL          "0"[cC][0-8]+
 NUMERO_HEXADECIMAL    "0"[xX][0-9a-fA-F]+
 NUMERO_BINARIO        "0"[bB][01]+
 NUMERO_REAL           [0-9]+"."[0-9]+
+IDENTIFICADOR         [a-zA-Z_][a-zA-Z0-9_]*
 
 a                     [aA]
 b                     [bB]
@@ -94,9 +95,9 @@ c_cedilha             [cCçÇ]
 {s}{e}{n}{a_acento}{o}  return 'SENAO'
 {s}{e}                  return 'SE'
 {v}{a}{r}{i}{a_acento}{v}{e}{i}{s}
-                       return 'VARIAVEIS'
+                        return 'VARIAVEIS'
 {v}{e}{r}{d}{a}{d}{e}{i}{r}{o}
-                       return 'VERDADEIRO'
+                        return 'VERDADEIRO'
 
 
 
@@ -121,18 +122,19 @@ c_cedilha             [cCçÇ]
                             console.log("DECIMAL " + yytext + "\n");
                             return 'NUMERO';
                         %}
-"*"                   return '*'
-"/"                   return '/'
-"-"                   return '-'
-"+"                   return '+'
-"^"                   return '^'
-"!"                   return '!'
-"%"                   return '%'
-"("                   return '('
-")"                   return ')'
-"PI"                  return 'PI'
-<<EOF>>               return 'EOF'
-.                     return 'INVALID'
+{IDENTIFICADOR}         return 'IDENTIFICADOR'
+"*"                     return '*'
+"/"                     return '/'
+"-"                     return '-'
+"+"                     return '+'
+"^"                     return '^'
+"!"                     return '!'
+"%"                     return '%'
+"("                     return '('
+")"                     return ')'
+"PI"                    return 'PI'
+<<EOF>>                 return 'EOF'
+.                       return 'INVALID'
 
 /lex
 
@@ -196,6 +198,10 @@ e
         {
             $$ = 1;
             console.log("palavra reservada" + $1);
+        }
+    | IDENTIFICADOR
+        {
+            $$ = 2;
         }
     | PI
         {$$ = Math.PI;}
