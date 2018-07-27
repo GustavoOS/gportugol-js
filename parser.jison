@@ -105,7 +105,7 @@ c_cedilha             [cCçÇ]
                             console.log("BINARIO " + yytext + "\n");
                             return 'BINARIO';
                         %}
-{NUMERO_OCTAL}    %{
+{NUMERO_OCTAL}          %{
                             console.log("OCTAL " + yytext + "\n");
                             return 'OCT';
                         %}
