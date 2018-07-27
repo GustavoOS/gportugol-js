@@ -131,7 +131,6 @@ c_cedilha             [cCçÇ]
 "("                   return '('
 ")"                   return ')'
 "PI"                  return 'PI'
-"E"                   return 'E'
 <<EOF>>               return 'EOF'
 .                     return 'INVALID'
 
