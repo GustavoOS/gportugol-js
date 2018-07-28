@@ -811,19 +811,16 @@ break;
 case 75:
                             console.log("Unterminated string constant");
                             this.popState();
-                            return (ERROR);
                         
 break;
 case 76:
                             console.log("String contains null character");
                             this.popState();
-                            return (ERROR);
                         
 break;
 case 77:
                             console.log("EOF in string constant");
                             this.popState();
-                            return (ERROR);
                         
 break;
 case 78:return 'INVALID'

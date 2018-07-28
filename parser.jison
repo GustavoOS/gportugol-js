@@ -178,17 +178,14 @@ c_cedilha             [cCçÇ]
 <quotes>\n              %{
                             console.log("Unterminated string constant");
                             this.popState();
-                            return (ERROR);
                         %}
 <quotes>[\0]|\0$        %{
                             console.log("String contains null character");
                             this.popState();
-                            return (ERROR);
                         %}                                     
 <quotes><<EOF>>         %{
                             console.log("EOF in string constant");
                             this.popState();
-                            return (ERROR);
                         %}
 
 
