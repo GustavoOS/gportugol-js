@@ -632,131 +632,153 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:/* skip whitespace */
 break;
-case 1:return 23
+case 1:this.begin("MultiLineComment");
 break;
-case 2:return 46
+case 2:this.popState();
 break;
-case 3:return 51
+case 3:;
 break;
-case 4:return 27
+case 4:;//Deletes most characters
 break;
-case 5:return 41
+case 5:;
 break;
-case 6:return 45
+case 6:;//Deletes missing characters if needed
 break;
-case 7:return 39
+case 7:;// Ignore
 break;
-case 8:return 35
+case 8:this.begin("SingleLineComment");
 break;
-case 9:return 42
+case 9:; // Delete
 break;
-case 10:return 32
+case 10:this.popState();
 break;
-case 11:return 43
+case 11:this.popState();
 break;
-case 12:return 47
+case 12:return 23
 break;
-case 13:return 22
+case 13:return 46
 break;
-case 14:return 40
+case 14:return 51
 break;
-case 15:return 33
+case 15:return 27
 break;
-case 16:return 54
+case 16:return 41
 break;
-case 17:return 30
+case 17:return 45
 break;
-case 18:return 49
+case 18:return 39
 break;
-case 19:return 25
+case 19:return 35
 break;
-case 20:return 52
+case 20:return 42
 break;
-case 21:return 28
+case 21:return 32
 break;
-case 22:return 53
+case 22:return 43
 break;
-case 23:return 29
+case 23:return 47
 break;
-case 24:return 48
+case 24:return 22
 break;
-case 25:return 36
+case 25:return 40
 break;
-case 26:return 34
+case 26:return 33
 break;
-case 27:return 44
+case 27:return 54
 break;
-case 28:return 56
+case 28:return 30
 break;
-case 29:return 26
+case 29:return 49
 break;
-case 30:return 50
+case 30:return 25
 break;
-case 31:return 55
+case 31:return 52
 break;
-case 32:return 38
+case 32:return 28
 break;
-case 33:return 37
+case 33:return 53
 break;
-case 34:return 24
+case 34:return 29
 break;
-case 35:return 31
+case 35:return 48
 break;
-case 36:
+case 36:return 36
+break;
+case 37:return 34
+break;
+case 38:return 44
+break;
+case 39:return 56
+break;
+case 40:return 26
+break;
+case 41:return 50
+break;
+case 42:return 55
+break;
+case 43:return 38
+break;
+case 44:return 37
+break;
+case 45:return 24
+break;
+case 46:return 31
+break;
+case 47:
                             console.log("BINARIO " + yy_.yytext + "\n");
                             return 16;
                         
 break;
-case 37:
+case 48:
                             console.log("OCTAL " + yy_.yytext + "\n");
                             return 17;
                         
 break;
-case 38:
+case 49:
                             console.log("HEXADECIMAL " + yy_.yytext + "\n");
                             return 18;
                         
 break;
-case 39:
+case 50:
                             console.log("REAL "+ yy_.yytext + "\n");
                             return 15;
                         
 break;
-case 40:
+case 51:
                             console.log("DECIMAL " + yy_.yytext + "\n");
                             return 15;
                         
 break;
-case 41:return 20
+case 52:return 20
 break;
-case 42:return 8
+case 53:return 8
 break;
-case 43:return 9
+case 54:return 9
 break;
-case 44:return 7
+case 55:return 7
 break;
-case 45:return 6
+case 56:return 6
 break;
-case 46:return 10
+case 57:return 10
 break;
-case 47:return 11
+case 58:return 11
 break;
-case 48:return 12
+case 59:return 12
 break;
-case 49:return 13
+case 60:return 13
 break;
-case 50:return 14
+case 61:return 14
 break;
-case 51:return 21
+case 62:return 21
 break;
-case 52:return 5
+case 63:return 5
 break;
-case 53:return 'INVALID'
+case 64:return 'INVALID'
 break;
 }
 },
-rules: [/^(?:\s+)/,/^(?:([aA])([lL])([gG])([oO])([rR])([iI])([tT])([mM])([oO]))/,/^(?:([aA])([tT])([eEéÉ]))/,/^(?:([cC])([aA])([rR])([aA])([cC])([tT])([eE])([rR])([eE])([sS]))/,/^(?:([cC])([aA])([rR])([aA])([cC])([tT])([eE])([rR])([eE]))/,/^(?:([eE])([nN])([qQ])([uU])([aA])([nN])([tT])([oO]))/,/^(?:([dD])([eE]))/,/^(?:([eE])([nN])([tT])([aA])([oO]))/,/^(?:([eE]))/,/^(?:([fF])([aA])([cC])([aA]))/,/^(?:([fF])([aA])([lL])([sS])([oO]))/,/^(?:([fF])([iI])([mM])-([eE])([nN])([qQ])([uU])([aA])([nN])([tT])([oO]))/,/^(?:([fF])([iI])([mM])-([pP])([aA])([rR])([aA]))/,/^(?:([fF])([iI])([mM])-([vV])([aA])([rR])([iI])([aAáÁãÃ])([vV])([eE])([iI])([sS]))/,/^(?:([fF])([iI])([mM])-([sS])([eE]))/,/^(?:([fF])([iI])([mM]))/,/^(?:([fF])([uU])([nN])([cCçÇ])([aAáÁãÃ])([oO]))/,/^(?:([iI])([nN])([iIíÍ])([cC])([iI])([oO]))/,/^(?:([iI])([nN])([tT])([eE])([iI])([rR])([oO])([sS]))/,/^(?:([iI])([nN])([tT])([eE])([iI])([rR])([oO]))/,/^(?:([lL])([iI])([tT])([eE])([rR])([aA])([iI])([sS]))/,/^(?:([lL])([iI])([tT])([eE])([rR])([aA])([lL]))/,/^(?:([lL])([oOóÓ])([gG])([iI])([cC])([oO])([sS]))/,/^(?:([lL])([oOóÓ])([gG])([iI])([cC])([oO]))/,/^(?:([mM])([aA])([tT])([rR])([iI])([zZ]))/,/^(?:([nN])([aAáÁãÃ])([oO]))/,/^(?:([oO])([uU]))/,/^(?:([pP])([aA])([rR])([aA]))/,/^(?:([pP])([aA])([sS])([sS])([oO]))/,/^(?:([rR])([eE])([aA])([lL]))/,/^(?:([rR])([eE])([aA])([iI])([sS]))/,/^(?:([rR])([eE])([tT])([oO])([rR])([nN])([eE]))/,/^(?:([sS])([eE])([nN])([aAáÁãÃ])([oO]))/,/^(?:([sS])([eE]))/,/^(?:([vV])([aA])([rR])([iI])([aAáÁãÃ])([vV])([eE])([iI])([sS]))/,/^(?:([vV])([eE])([rR])([dD])([aA])([dD])([eE])([iI])([rR])([oO]))/,/^(?:(0[bB][01]+))/,/^(?:(0[cC][0-8]+))/,/^(?:(0[xX][0-9a-fA-F]+))/,/^(?:([0-9]+\.[0-9]+))/,/^(?:([0-9]+))/,/^(?:([a-zA-Z_][a-zA-Z0-9_]*))/,/^(?:\*)/,/^(?:\/)/,/^(?:-)/,/^(?:\+)/,/^(?:\^)/,/^(?:!)/,/^(?:%)/,/^(?:\()/,/^(?:\))/,/^(?:PI\b)/,/^(?:$)/,/^(?:.)/],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53],"inclusive":true}}
+rules: [/^(?:\s+)/,/^(?:\/\*)/,/^(?:\*+\/)/,/^(?:[^\n\*]*)/,/^(?:\*+[^\n\/])/,/^(?:\n)/,/^(?:[^\n])/,/^(?:$)/,/^(?:\/\/)/,/^(?:[^\n])/,/^(?:\n)/,/^(?:$)/,/^(?:([aA])([lL])([gG])([oO])([rR])([iI])([tT])([mM])([oO]))/,/^(?:([aA])([tT])([eEéÉ]))/,/^(?:([cC])([aA])([rR])([aA])([cC])([tT])([eE])([rR])([eE])([sS]))/,/^(?:([cC])([aA])([rR])([aA])([cC])([tT])([eE])([rR])([eE]))/,/^(?:([eE])([nN])([qQ])([uU])([aA])([nN])([tT])([oO]))/,/^(?:([dD])([eE]))/,/^(?:([eE])([nN])([tT])([aA])([oO]))/,/^(?:([eE]))/,/^(?:([fF])([aA])([cC])([aA]))/,/^(?:([fF])([aA])([lL])([sS])([oO]))/,/^(?:([fF])([iI])([mM])-([eE])([nN])([qQ])([uU])([aA])([nN])([tT])([oO]))/,/^(?:([fF])([iI])([mM])-([pP])([aA])([rR])([aA]))/,/^(?:([fF])([iI])([mM])-([vV])([aA])([rR])([iI])([aAáÁãÃ])([vV])([eE])([iI])([sS]))/,/^(?:([fF])([iI])([mM])-([sS])([eE]))/,/^(?:([fF])([iI])([mM]))/,/^(?:([fF])([uU])([nN])([cCçÇ])([aAáÁãÃ])([oO]))/,/^(?:([iI])([nN])([iIíÍ])([cC])([iI])([oO]))/,/^(?:([iI])([nN])([tT])([eE])([iI])([rR])([oO])([sS]))/,/^(?:([iI])([nN])([tT])([eE])([iI])([rR])([oO]))/,/^(?:([lL])([iI])([tT])([eE])([rR])([aA])([iI])([sS]))/,/^(?:([lL])([iI])([tT])([eE])([rR])([aA])([lL]))/,/^(?:([lL])([oOóÓ])([gG])([iI])([cC])([oO])([sS]))/,/^(?:([lL])([oOóÓ])([gG])([iI])([cC])([oO]))/,/^(?:([mM])([aA])([tT])([rR])([iI])([zZ]))/,/^(?:([nN])([aAáÁãÃ])([oO]))/,/^(?:([oO])([uU]))/,/^(?:([pP])([aA])([rR])([aA]))/,/^(?:([pP])([aA])([sS])([sS])([oO]))/,/^(?:([rR])([eE])([aA])([lL]))/,/^(?:([rR])([eE])([aA])([iI])([sS]))/,/^(?:([rR])([eE])([tT])([oO])([rR])([nN])([eE]))/,/^(?:([sS])([eE])([nN])([aAáÁãÃ])([oO]))/,/^(?:([sS])([eE]))/,/^(?:([vV])([aA])([rR])([iI])([aAáÁãÃ])([vV])([eE])([iI])([sS]))/,/^(?:([vV])([eE])([rR])([dD])([aA])([dD])([eE])([iI])([rR])([oO]))/,/^(?:(0[bB][01]+))/,/^(?:(0[cC][0-8]+))/,/^(?:(0[xX][0-9a-fA-F]+))/,/^(?:([0-9]+\.[0-9]+))/,/^(?:([0-9]+))/,/^(?:([a-zA-Z_][a-zA-Z0-9_]*))/,/^(?:\*)/,/^(?:\/)/,/^(?:-)/,/^(?:\+)/,/^(?:\^)/,/^(?:!)/,/^(?:%)/,/^(?:\()/,/^(?:\))/,/^(?:PI\b)/,/^(?:$)/,/^(?:.)/],
+conditions: {"MultiLineComment":{"rules":[2,3,4,5,6,7],"inclusive":false},"SingleLineComment":{"rules":[9,10,11],"inclusive":false},"INITIAL":{"rules":[0,1,8,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64],"inclusive":true}}
 });
 return lexer;
 })();

@@ -42,10 +42,26 @@ u_acento              [uUúÚ]
 
 c_cedilha             [cCçÇ]
 
+
+%x MultiLineComment SingleLineComment
+
 %%
 
 \s+                   /* skip whitespace */
 
+<INITIAL>"/*"                         this.begin("MultiLineComment");
+<MultiLineComment>"*"+\/              this.popState();
+<MultiLineComment>[^\n\*]*            ;
+<MultiLineComment>"*"+[^\n\/]         ;//Deletes most characters
+<MultiLineComment>\n                  ;
+<MultiLineComment>[^\n]               ;//Deletes missing characters if needed
+<MultiLineComment><<EOF>>             ;// Ignore
+
+
+<INITIAL>"//"                         this.begin("SingleLineComment");
+<SingleLineComment>[^\n]              ; // Delete
+<SingleLineComment>\n                 this.popState();
+<SingleLineComment><<EOF>>            this.popState();
 
 
 {a}{l}{g}{o}{r}{i}{t}{m}{o}
