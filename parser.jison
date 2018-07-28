@@ -1,3 +1,7 @@
+%{
+    var stringBuffer;
+%}
+
 /* lexical grammar */
 %lex
 NUMERO_DECIMAL        [0-9]+
@@ -43,7 +47,7 @@ u_acento              [uUúÚ]
 c_cedilha             [cCçÇ]
 
 
-%x MultiLineComment SingleLineComment
+%x MultiLineComment SingleLineComment quotes
 
 %%
 
@@ -150,6 +154,44 @@ c_cedilha             [cCçÇ]
 ")"                     return ')'
 "PI"                    return 'PI'
 <<EOF>>                 return 'EOF'
+
+<INITIAL>\"             %{
+                            stringBuffer = "";
+                            this.begin("quotes");
+                        %}
+<quotes>\"              %{                        
+                            this.popState();
+                            return 'STR_CONST';
+                        %}
+
+
+
+<quotes>[^\\\n\0\"]+      stringBuffer+=yytext;
+<quotes>\\[^btnf0\0\n]    stringBuffer+=yytext.substring(1);
+<quotes>\\\n              stringBuffer+="\n";
+<quotes>\\b               stringBuffer+="\b";
+<quotes>\\t               stringBuffer+="\t";
+<quotes>\\n               stringBuffer+="\n";
+<quotes>\\f               stringBuffer+="\f";
+<quotes>\\0               stringBuffer+="0";
+<quotes>\\                ;
+<quotes>\n              %{
+                            console.log("Unterminated string constant");
+                            this.popState();
+                            return (ERROR);
+                        %}
+<quotes>[\0]|\0$        %{
+                            console.log("String contains null character");
+                            this.popState();
+                            return (ERROR);
+                        %}                                     
+<quotes><<EOF>>         %{
+                            console.log("EOF in string constant");
+                            this.popState();
+                            return (ERROR);
+                        %}
+
+
 .                       return 'INVALID'
 
 /lex
@@ -221,6 +263,10 @@ e
         }
     | PI
         {$$ = Math.PI;}
+    | STR_CONST
+        {
+            $$ = Number(stringBuffer);
+        }
     ;
 
 palavras-reservadas
