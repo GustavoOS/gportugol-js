@@ -1,5 +1,9 @@
 %{
     var stringBuffer;
+
+    function output_error(message){
+        console.log(message);
+    }
 %}
 
 /* lexical grammar */
@@ -125,23 +129,23 @@ single_quote          [']
 
 
 {NUMERO_BINARIO}        %{
-                            console.log("BINARIO " + yytext + "\n");
+                            output_error("BINARIO " + yytext + "\n");
                             return 'BINARIO';
                         %}
 {NUMERO_OCTAL}          %{
-                            console.log("OCTAL " + yytext + "\n");
+                            output_error("OCTAL " + yytext + "\n");
                             return 'OCT';
                         %}
 {NUMERO_HEXADECIMAL}    %{
-                            console.log("HEXADECIMAL " + yytext + "\n");
+                            output_error("HEXADECIMAL " + yytext + "\n");
                             return 'HEX';
                         %}
 {NUMERO_REAL}           %{
-                            console.log("REAL "+ yytext + "\n");
+                            output_error("REAL "+ yytext + "\n");
                             return 'NUMERO';
                         %}
 {NUMERO_DECIMAL}        %{
-                            console.log("DECIMAL " + yytext + "\n");
+                            output_error("DECIMAL " + yytext + "\n");
                             return 'NUMERO';
                         %}
 {IDENTIFICADOR}         return 'IDENTIFICADOR'
@@ -178,15 +182,15 @@ single_quote          [']
 <quotes>\\0               stringBuffer+="0";
 <quotes>\\                ;
 <quotes>\n              %{
-                            console.log("Unterminated string constant");
+                            output_error("Unterminated string constant");
                             this.popState();
                         %}
 <quotes>[\0]|\0$        %{
-                            console.log("String contains null character");
+                            output_error("String contains null character");
                             this.popState();
                         %}                                     
 <quotes><<EOF>>         %{
-                            console.log("EOF in string constant");
+                            output_error("EOF in string constant");
                             this.popState();
                         %}
 
@@ -218,7 +222,7 @@ single_quote          [']
 
 expressions
     : e EOF
-        { typeof console !== 'undefined' ? console.log($1) : print($1);
+        { typeof console !== 'undefined' ? output_error($1) : print($1);
           return $1; }
     ;
 
@@ -262,7 +266,7 @@ e
     | palavras-reservadas
         {
             $$ = 1;
-            console.log("palavra reservada" + $1);
+            output_error("palavra reservada" + $1);
         }
     | IDENTIFICADOR
         {
