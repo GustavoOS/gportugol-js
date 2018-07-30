@@ -46,6 +46,8 @@ u_acento              [uUúÚ]
 
 c_cedilha             [cCçÇ]
 
+single_quote          [']
+
 
 %x MultiLineComment SingleLineComment quotes
 
@@ -187,6 +189,14 @@ c_cedilha             [cCçÇ]
                             console.log("EOF in string constant");
                             this.popState();
                         %}
+
+
+{single_quote}"\\n"{single_quote}               %{stringBuffer ="\n"; return C_CONST; %}
+{single_quote}"\\b"{single_quote}               %{stringBuffer = "\b"; return C_CONST; %}
+{single_quote}"\\t"{single_quote}               %{stringBuffer = "\t"; return C_CONST; %}
+{single_quote}"\\n"{single_quote}               %{stringBuffer = "\n"; return C_CONST; %}
+{single_quote}"\\f"{single_quote}               %{stringBuffer = "\f"; return C_CONST; %}
+{single_quote}[^\n]{single_quote}               %{stringBuffer = yytext.slice(1,-1); return C_CONST;%}
 
 
 .                       return 'INVALID'
