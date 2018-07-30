@@ -201,6 +201,7 @@ single_quote          [']
 {single_quote}"\\n"{single_quote}               %{stringBuffer = "\n"; return C_CONST; %}
 {single_quote}"\\f"{single_quote}               %{stringBuffer = "\f"; return C_CONST; %}
 {single_quote}[^\n]{single_quote}               %{stringBuffer = yytext.slice(1,-1); return C_CONST;%}
+{single_quote}{single_quote}                    %{stringBuffer = ""; return C_CONST;%}
 
 
 .                       return 'INVALID'
