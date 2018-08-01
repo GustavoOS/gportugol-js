@@ -17,7 +17,7 @@ IDENTIFICADOR         [a-zA-Z_][a-zA-Z0-9_]*
 
 
 ESPECIAIS            ":="|"<="|">="|"<>"
-SIMBOLOS              "+"|"-"|"*"|"/"|";"|","|"<"|":"|"@"|"("|")"|"~"|"{"|"}"|"="|"."
+SIMBOLOS              "+"|"-"|"*"|"/"|";"|","|"<"|":"|"@"|"("|")"|"~"|"{"|"}"|"="|"."|"|"|"^"
 
 a                     [aA]
 b                     [bB]
@@ -89,7 +89,7 @@ single_quote          [']
                         return 'ENQUANTO'
 {d}{e}                  return 'DE'
 {e}{n}{t}{a}{o}         return 'ENTAO'
-{e}                     return 'E'
+{e}|"&&"                return 'E'
 {f}{a}{c}{a}            return 'FACA'
 {f}{a}{l}{s}{o}         return 'FALSO'
 {f}{i}{m}"-"{e}{n}{q}{u}{a}{n}{t}{o}
@@ -116,7 +116,7 @@ single_quote          [']
                         return 'LOGICO'
 {m}{a}{t}{r}{i}{z}      return 'MATRIZ'
 {n}{a_acento}{o}        return 'NAO'
-{o}{u}             return 'OU'
+{o}{u}|"||"             return 'OU'
 {p}{a}{r}{a}            return 'PARA'
 {p}{a}{s}{s}{o}         return 'PASSO'
 {r}{e}{a}{l}            return 'REAL'
@@ -312,8 +312,8 @@ var-decl-list
     ;
 
 var_decl
-    : IDENTIFICADOR var-list ':' tipo-primitivo
-    | IDENTIFICADOR var-list ':' tipo-matriz
+    : IDENTIFICADOR var-list ':' tipo_primitivo
+    | IDENTIFICADOR var-list ':' tipo_matriz
     ;
 
 var-list
@@ -321,7 +321,7 @@ var-list
     | %empty
     ;
 
-tipo-primitivo
+tipo_primitivo
     : INTEIRO
     | REAL
     | CARACTERE
@@ -329,8 +329,8 @@ tipo-primitivo
     | LOGICO
     ;
 
-tipo-matriz
-    : MATRIZ lista_dimensoes DE tipo-primitivo-plural
+tipo_matriz
+    : MATRIZ lista_dimensoes DE tipo_primitivo-plural
     ;
 
 lista_dimensoes
@@ -346,7 +346,7 @@ inteiro_literal
     ;
 
 
-tipo-primitivo-plural
+tipo_primitivo-plural
     : INTEIROS
     | REAIS
     | CARACTERES
@@ -412,5 +412,76 @@ passo_mudanca
     | PASSO '-' inteiro_literal
     ;
 
+expressao
+    : expressao OU expressao
+    | expressao E expressao
+    | expressao "|" expressao
+    | expressao "^" expressao
+    | expressao "&" expressao
+    | expressao "=" expressao
+    | expressao "<>" expressao
+    | expressao ">" expressao
+    | expressao ">=" expressao
+    | expressao "<" expressao
+    | expressao "<=" expressao
+    | expressao "+" expressao
+    | expressao "-" expressao
+    | expressao "/" expressao
+    | expressao "*" expressao
+    | expressao "%" expressao
+    | "+" termo
+    | "-" termo
+    | "~" termo
+    | NAO termo
+    | termo
+    ;
 
+termo
+    : chamada_funcao
+    | lvalue
+    | literal
+    | "(" expressao ")"
+    ;
+
+chamada_funcao
+    : IDENTIFICADOR "(" argumentos ")"
+    | IDENTIFICADOR "(" ")"
+    ;
+
+argumentos
+    : expressao
+    | argumentos ',' expressao
+    ;
+
+literal
+    : STR_CONST
+    | inteiro_literal
+    | NUMERO_R
+    | C_CONST
+    | VERDADEIRO
+    | FALSO
+    ;
+
+declaracao_funcao
+    : FUNCAO IDENTIFICADOR "("  ")" declaracao_var_fun bloco_declaracao
+    | FUNCAO IDENTIFICADOR "(" lista_parametros ")" declaracao_var_fun bloco_declaracao
+    | FUNCAO IDENTIFICADOR "("  ")" ":" tipo_primitivo declaracao_var_fun bloco_declaracao
+    | FUNCAO IDENTIFICADOR "(" lista_parametros ")" ":" tipo_primitivo declaracao_var_fun bloco_declaracao
+    ;
+
+declaracao_var_fun
+    : var_decl ';'
+    | declaracao var_decl ';'
+    | %empty
+    ;
+
+lista_parametros
+    : parametro
+    | lista_parametros ',' parametro
+    ;
+
+parametro
+    : IDENTIFICADOR ':' tipo_primitivo
+    | IDENTIFICADOR ':' tipo_matriz
+    ;
 
