@@ -15,6 +15,10 @@ NUMERO_BINARIO        "0"[bB][01]+
 NUMERO_REAL           [0-9]+"."[0-9]+
 IDENTIFICADOR         [a-zA-Z_][a-zA-Z0-9_]*
 
+
+ESPECIAIS            ":="|"<="|">="|"<>"
+SIMBOLOS              "+"|"-"|"*"|"/"|";"|","|"<"|":"|"@"|"("|")"|"~"|"{"|"}"|"="|"."
+
 a                     [aA]
 b                     [bB]
 c                     [cC]
@@ -112,7 +116,7 @@ single_quote          [']
                         return 'LOGICO'
 {m}{a}{t}{r}{i}{z}      return 'MATRIZ'
 {n}{a_acento}{o}        return 'NAO'
-{o}{u}                  return 'OU'
+{o}{u}             return 'OU'
 {p}{a}{r}{a}            return 'PARA'
 {p}{a}{s}{s}{o}         return 'PASSO'
 {r}{e}{a}{l}            return 'REAL'
@@ -142,7 +146,7 @@ single_quote          [']
                         %}
 {NUMERO_REAL}           %{
                             output_error("REAL "+ yytext + "\n");
-                            return 'NUMERO';
+                            return 'NUMERO_R';
                         %}
 {NUMERO_DECIMAL}        %{
                             output_error("DECIMAL " + yytext + "\n");
@@ -204,6 +208,12 @@ single_quote          [']
 {single_quote}{single_quote}                    %{stringBuffer = ""; return C_CONST;%}
 
 
+{ESPECIAIS}            %{
+                            return yytext;
+                        %}                       
+{SIMBOLOS}              %{
+                            return yytext;
+                        %}
 .                       return 'INVALID'
 
 /lex
@@ -250,6 +260,8 @@ e
         {$$ = $2;}
     | NUMERO
         {$$ = Number(yytext);}
+    | NUMERO_R
+    {$$ = Number(yytext);}
     | BINARIO
         {
 
@@ -281,41 +293,114 @@ e
         }
     ;
 
-palavras-reservadas
-    : FIM-VARIAVEIS { $$ = yytext;}
-    | ALGORITMO { $$ = yytext;}
-    | VARIAVEIS { $$ = yytext;}
-    | INTEIRO { $$ = yytext;}
-    | REAL { $$ = yytext;}
-    | CARACTERE { $$ = yytext;}
-    | LITERAL { $$ = yytext;}
-    | LOGICO { $$ = yytext;}
-    | INICIO { $$ = yytext;}
-    | VERDADEIRO { $$ = yytext;}
-    | FALSO { $$ = yytext;}
-    | FIM { $$ = yytext;}
-    | OU { $$ = yytext;}
-    | E { $$ = yytext;}
-    | NAO { $$ = yytext;}
-    | SE { $$ = yytext;}
-    | SENAO { $$ = yytext;}
-    | ENTAO { $$ = yytext;}
-    | FIM-SE { $$ = yytext;}
-    | ENQUANTO { $$ = yytext;}
-    | FACA { $$ = yytext;}
-    | FIM-ENQUANTO { $$ = yytext;}
-    | PARA { $$ = yytext;}
-    | DE { $$ = yytext;}
-    | ATE { $$ = yytext;}
-    | FIM-PARA { $$ = yytext;}
-    | MATRIZ { $$ = yytext;}
-    | INTEIROS { $$ = yytext;}
-    | REAIS { $$ = yytext;}
-    | CARACTERES { $$ = yytext;}
-    | LITERAIS { $$ = yytext;}
-    | LOGICOS { $$ = yytext;}
-    | FUNCAO { $$ = yytext;}
-    | RETORNE { $$ = yytext;}
-    | PASSO { $$ = yytext;}
+algoritmo
+    : declaracao_algoritmo bloco_declaracao fun_decl_list EOF
+    | declaracao_algoritmo var_decl_block bloco_declaracao fun_decl_list EOF
     ;
+
+declaracao_algoritmo
+    : ALGORITMO IDENTIFICADOR ';'
+    ;
+
+var_decl_block
+    : VARIAVEIS var-decl-list FIM-VARIAVEIS
+    ;
+
+var-decl-list
+    : var_decl ';'
+    | var-dec-list var_decl ';'
+    ;
+
+var_decl
+    : IDENTIFICADOR var-list ':' tipo-primitivo
+    | IDENTIFICADOR var-list ':' tipo-matriz
+    ;
+
+var-list
+    : var-list ',' IDENTIFICADOR
+    | %empty
+    ;
+
+tipo-primitivo
+    : INTEIRO
+    | REAL
+    | CARACTERE
+    | LITERAL
+    | LOGICO
+    ;
+
+tipo-matriz
+    : MATRIZ lista_dimensoes DE tipo-primitivo-plural
+    ;
+
+lista_dimensoes
+    : '[' inteiro_literal ']'
+    | lista_dimensoes '[' inteiro_literal ']'
+    ;
+
+inteiro_literal
+    : NUMERO
+    | BINARIO
+    | HEX
+    | OCT
+    ;
+
+
+tipo-primitivo-plural
+    : INTEIROS
+    | REAIS
+    | CARACTERES
+    | LITERAIS
+    | LOGICOS
+    ;
+
+bloco_declaracao
+    : INICIO lista_declaracao FIM
+    ;
+
+lista_declaracao
+    : declaracao
+    | lista_declaracao declaracao
+    | %empty
+    ;
+
+declaracao
+    : declaracao_atribuicao
+    | chamada_funcao ';'
+    | declaracao_retorno
+    | declaracao_se
+    | declaracao_enquanto
+    | declaracao_para
+    ;
+
+declaracao_retorno
+    : RETORNE ';'
+    | RETORNE expressao ';'
+    ;
+
+lvalue
+    : IDENTIFICADOR lista_indices
+    | IDENTIFICADOR
+    ;
+
+lista_indices
+    : '['expressao']'
+    | lista_indices '[' expressao ']'
+    ;
+
+declaracao_atribuicao
+    : lvalue ':=' expr ';'
+    ;
+
+declaracao_se
+    : SE expressao ENTAO lista_declaracao FIM-SE
+    | SE expressao ENTAO lista_declaracao SENAO lista_declaracao FIM-SE
+    ;
+
+declaracao_enquanto
+    : ENQUANTO expressao FACA lista_declaracao FIM-ENQUANTO
+    ;
+
+
+
 
