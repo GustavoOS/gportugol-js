@@ -401,6 +401,16 @@ declaracao_enquanto
     : ENQUANTO expressao FACA lista_declaracao FIM-ENQUANTO
     ;
 
+declaracao_para
+    : PARA lvalue DE expressao ATE expressao FACA lista_declaracao FIM-PARA
+    | PARA lvalue DE expressao ATE expressao passo_mudanca FACA lista_declaracao FIM-PARA
+    ;
+    
+passo_mudanca
+    : PASSO inteiro_literal
+    | PASSO '+' inteiro_literal
+    | PASSO '-' inteiro_literal
+    ;
 
 
 

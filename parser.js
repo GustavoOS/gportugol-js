@@ -75,9 +75,9 @@ var parser = (function(){
 var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,3],$V1=[1,4],$V2=[1,5],$V3=[1,6],$V4=[1,7],$V5=[1,8],$V6=[1,9],$V7=[1,10],$V8=[1,11],$V9=[1,12],$Va=[1,13],$Vb=[1,15],$Vc=[1,16],$Vd=[1,17],$Ve=[1,18],$Vf=[1,19],$Vg=[1,20],$Vh=[1,21],$Vi=[5,6,7,8,9,10,11,12,14],$Vj=[5,6,7,14],$Vk=[5,6,7,8,9,14];
 var parser = {trace: function trace() { },
 yy: {},
-symbols_: {"error":2,"expressions":3,"e":4,"EOF":5,"+":6,"-":7,"*":8,"/":9,"^":10,"!":11,"%":12,"(":13,")":14,"NUMERO":15,"NUMERO_R":16,"BINARIO":17,"OCT":18,"HEX":19,"palavras-reservadas":20,"IDENTIFICADOR":21,"PI":22,"STR_CONST":23,"algoritmo":24,"declaracao_algoritmo":25,"bloco_declaracao":26,"fun_decl_list":27,"var_decl_block":28,"ALGORITMO":29,";":30,"VARIAVEIS":31,"var-decl-list":32,"FIM-VARIAVEIS":33,"var_decl":34,"var-dec-list":35,"var-list":36,":":37,"tipo-primitivo":38,"tipo-matriz":39,",":40,"INTEIRO":41,"REAL":42,"CARACTERE":43,"LITERAL":44,"LOGICO":45,"MATRIZ":46,"lista_dimensoes":47,"DE":48,"tipo-primitivo-plural":49,"[":50,"inteiro_literal":51,"]":52,"INTEIROS":53,"REAIS":54,"CARACTERES":55,"LITERAIS":56,"LOGICOS":57,"INICIO":58,"lista_declaracao":59,"FIM":60,"declaracao":61,"declaracao_atribuicao":62,"chamada_funcao":63,"declaracao_retorno":64,"declaracao_se":65,"declaracao_enquanto":66,"declaracao_para":67,"RETORNE":68,"expressao":69,"lvalue":70,"lista_indices":71,":=":72,"expr":73,"SE":74,"ENTAO":75,"FIM-SE":76,"SENAO":77,"ENQUANTO":78,"FACA":79,"FIM-ENQUANTO":80,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",6:"+",7:"-",8:"*",9:"/",10:"^",11:"!",12:"%",13:"(",14:")",15:"NUMERO",16:"NUMERO_R",17:"BINARIO",18:"OCT",19:"HEX",20:"palavras-reservadas",21:"IDENTIFICADOR",22:"PI",23:"STR_CONST",27:"fun_decl_list",29:"ALGORITMO",30:";",31:"VARIAVEIS",33:"FIM-VARIAVEIS",35:"var-dec-list",37:":",40:",",41:"INTEIRO",42:"REAL",43:"CARACTERE",44:"LITERAL",45:"LOGICO",46:"MATRIZ",48:"DE",50:"[",52:"]",53:"INTEIROS",54:"REAIS",55:"CARACTERES",56:"LITERAIS",57:"LOGICOS",58:"INICIO",60:"FIM",63:"chamada_funcao",67:"declaracao_para",68:"RETORNE",69:"expressao",72:":=",73:"expr",74:"SE",75:"ENTAO",76:"FIM-SE",77:"SENAO",78:"ENQUANTO",79:"FACA",80:"FIM-ENQUANTO"},
-productions_: [0,[3,2],[4,3],[4,3],[4,3],[4,3],[4,3],[4,2],[4,2],[4,2],[4,3],[4,1],[4,1],[4,1],[4,1],[4,1],[4,1],[4,1],[4,1],[4,1],[24,4],[24,5],[25,3],[28,3],[32,2],[32,3],[34,4],[34,4],[36,3],[36,0],[38,1],[38,1],[38,1],[38,1],[38,1],[39,4],[47,3],[47,4],[51,1],[51,1],[51,1],[51,1],[49,1],[49,1],[49,1],[49,1],[49,1],[26,3],[59,1],[59,2],[59,0],[61,1],[61,2],[61,1],[61,1],[61,1],[61,1],[64,2],[64,3],[70,2],[70,1],[71,3],[71,4],[62,4],[65,5],[65,7],[66,5]],
+symbols_: {"error":2,"expressions":3,"e":4,"EOF":5,"+":6,"-":7,"*":8,"/":9,"^":10,"!":11,"%":12,"(":13,")":14,"NUMERO":15,"NUMERO_R":16,"BINARIO":17,"OCT":18,"HEX":19,"palavras-reservadas":20,"IDENTIFICADOR":21,"PI":22,"STR_CONST":23,"algoritmo":24,"declaracao_algoritmo":25,"bloco_declaracao":26,"fun_decl_list":27,"var_decl_block":28,"ALGORITMO":29,";":30,"VARIAVEIS":31,"var-decl-list":32,"FIM-VARIAVEIS":33,"var_decl":34,"var-dec-list":35,"var-list":36,":":37,"tipo-primitivo":38,"tipo-matriz":39,",":40,"INTEIRO":41,"REAL":42,"CARACTERE":43,"LITERAL":44,"LOGICO":45,"MATRIZ":46,"lista_dimensoes":47,"DE":48,"tipo-primitivo-plural":49,"[":50,"inteiro_literal":51,"]":52,"INTEIROS":53,"REAIS":54,"CARACTERES":55,"LITERAIS":56,"LOGICOS":57,"INICIO":58,"lista_declaracao":59,"FIM":60,"declaracao":61,"declaracao_atribuicao":62,"chamada_funcao":63,"declaracao_retorno":64,"declaracao_se":65,"declaracao_enquanto":66,"declaracao_para":67,"RETORNE":68,"expressao":69,"lvalue":70,"lista_indices":71,":=":72,"expr":73,"SE":74,"ENTAO":75,"FIM-SE":76,"SENAO":77,"ENQUANTO":78,"FACA":79,"FIM-ENQUANTO":80,"PARA":81,"ATE":82,"FIM-PARA":83,"passo_mudanca":84,"PASSO":85,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",6:"+",7:"-",8:"*",9:"/",10:"^",11:"!",12:"%",13:"(",14:")",15:"NUMERO",16:"NUMERO_R",17:"BINARIO",18:"OCT",19:"HEX",20:"palavras-reservadas",21:"IDENTIFICADOR",22:"PI",23:"STR_CONST",27:"fun_decl_list",29:"ALGORITMO",30:";",31:"VARIAVEIS",33:"FIM-VARIAVEIS",35:"var-dec-list",37:":",40:",",41:"INTEIRO",42:"REAL",43:"CARACTERE",44:"LITERAL",45:"LOGICO",46:"MATRIZ",48:"DE",50:"[",52:"]",53:"INTEIROS",54:"REAIS",55:"CARACTERES",56:"LITERAIS",57:"LOGICOS",58:"INICIO",60:"FIM",63:"chamada_funcao",68:"RETORNE",69:"expressao",72:":=",73:"expr",74:"SE",75:"ENTAO",76:"FIM-SE",77:"SENAO",78:"ENQUANTO",79:"FACA",80:"FIM-ENQUANTO",81:"PARA",82:"ATE",83:"FIM-PARA",85:"PASSO"},
+productions_: [0,[3,2],[4,3],[4,3],[4,3],[4,3],[4,3],[4,2],[4,2],[4,2],[4,3],[4,1],[4,1],[4,1],[4,1],[4,1],[4,1],[4,1],[4,1],[4,1],[24,4],[24,5],[25,3],[28,3],[32,2],[32,3],[34,4],[34,4],[36,3],[36,0],[38,1],[38,1],[38,1],[38,1],[38,1],[39,4],[47,3],[47,4],[51,1],[51,1],[51,1],[51,1],[49,1],[49,1],[49,1],[49,1],[49,1],[26,3],[59,1],[59,2],[59,0],[61,1],[61,2],[61,1],[61,1],[61,1],[61,1],[64,2],[64,3],[70,2],[70,1],[71,3],[71,4],[62,4],[65,5],[65,7],[66,5],[67,9],[67,10],[84,2],[84,3],[84,3]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -664,7 +664,7 @@ case 11:this.popState();
 break;
 case 12:return 29
 break;
-case 13:return 'ATE'
+case 13:return 82
 break;
 case 14:return 55
 break;
@@ -684,7 +684,7 @@ case 21:return 'FALSO'
 break;
 case 22:return 80
 break;
-case 23:return 'FIM-PARA'
+case 23:return 83
 break;
 case 24:return 33
 break;
@@ -714,9 +714,9 @@ case 36:return 'NAO'
 break;
 case 37:return 'OU'
 break;
-case 38:return 'PARA'
+case 38:return 81
 break;
-case 39:return 'PASSO'
+case 39:return 85
 break;
 case 40:return 42
 break;
