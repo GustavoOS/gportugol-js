@@ -227,75 +227,19 @@ single_quote          [']
 %right '%'
 %left UMINUS
 
-%start expressions
+%start programa
 
 %% /* language grammar */
 
-expressions
-    : e EOF
-        { typeof console !== 'undefined' ? output_error($1) : print($1);
+programa
+    : algoritmo EOF
+    { typeof console !== 'undefined' ? console.log($1) : print($1);
           return $1; }
     ;
 
-e
-    : e '+' e
-        {$$ = $1+$3;}
-    | e '-' e
-        {$$ = $1-$3;}
-    | e '*' e
-        {$$ = $1*$3;}
-    | e '/' e
-        {$$ = $1/$3;}
-    | e '^' e
-        {$$ = Math.pow($1, $3);}
-    | e '!'
-        {{
-          $$ = (function fact (n) { return n==0 ? 1 : fact(n-1) * n })($1);
-        }}
-    | e '%'
-        {$$ = $1/100;}
-    | '-' e %prec UMINUS
-        {$$ = -$2;}
-    | '(' e ')'
-        {$$ = $2;}
-    | NUMERO
-        {$$ = Number(yytext);}
-    | NUMERO_R
-    {$$ = Number(yytext);}
-    | BINARIO
-        {
-
-            $$ = parseInt(yytext.substring(2), 2);
-        }
-    | OCT
-        {
-            $$ = parseInt(yytext.substring(2), 8);
-        }
-    | HEX
-        {
-            $$ = parseInt(yytext.substring(2), 16);
-        }
-
-    | palavras-reservadas
-        {
-            $$ = 1;
-            output_error("palavra reservada" + $1);
-        }
-    | IDENTIFICADOR
-        {
-            $$ = 2;
-        }
-    | PI
-        {$$ = Math.PI;}
-    | STR_CONST
-        {
-            $$ = Number(stringBuffer);
-        }
-    ;
-
 algoritmo
-    : declaracao_algoritmo bloco_declaracao fun_decl_list EOF
-    | declaracao_algoritmo var_decl_block bloco_declaracao fun_decl_list EOF
+    : declaracao_algoritmo bloco_declaracao fun_decl_list
+    | declaracao_algoritmo var_decl_block bloco_declaracao fun_decl_list
     ;
 
 declaracao_algoritmo
