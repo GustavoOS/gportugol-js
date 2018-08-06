@@ -241,6 +241,12 @@ algoritmo
     : declaracao_algoritmo bloco_declaracao fun_decl_list
     | declaracao_algoritmo var_decl_block bloco_declaracao fun_decl_list
     ;
+    
+fun_decl_list
+    : declaracao_funcao
+    | fun_decl_list declaracao_funcao
+    | %empty
+    ;
 
 declaracao_algoritmo
     : ALGORITMO IDENTIFICADOR ';'
