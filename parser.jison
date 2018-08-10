@@ -266,19 +266,32 @@ var_decl_block
 
 var-decl-list
     : var-decl-list var_decl
+        {
+            $$ = $1.concat([$2]);
+        }
     | %empty
+        {
+            $$ = [];
+        }
     ;
 
 var_decl
-    : var-list ':' tipo_singular ';'
+    : var-list ':' tipo_matriz ';'
     {
-
+        $$ = {
+            variaveis: $1,
+            tipo: $3,
+            classe: 'MATRIZ'
+        }
     }
-    ;
-
-tipo_singular
-    : tipo_matriz
-    | tipo_primitivo
+    | var-list ':' tipo_primitivo ';'
+        {
+            $$ = {
+                variaveis: $1,
+                tipo: $3,
+                classe: 'PRIMITIVO'
+            }
+        }
     ;
 
 
@@ -286,60 +299,97 @@ var-list
     : variavel
         {
             $$ = [$1];
-            console.log($$);
         }
     | var-list ',' variavel
         {
             $$ = $1.concat([$3]);
-            console.log($$);
         }
     ;
 
 tipo_primitivo
     : INTEIRO
+        {
+            $$ = 'INTEIRO';
+        }
     | REAL
+        {
+            $$ = 'REAL';
+        }
     | CARACTERE
+        {
+            $$ = 'CARACTERE';
+        }
     | LITERAL
+        {
+            $$ = 'LITERAL';
+        }
     | LOGICO
+        {
+            $$ = 'LOGICO';
+        }
     ;
 
 tipo_matriz
     : MATRIZ lista_dimensoes DE tipo_primitivo-plural
+        {
+            $$ = {
+                dimensoes: $2,
+                tipo: $4
+            }
+        }
     ;
 
 lista_dimensoes
     : '[' inteiro_literal ']'
+        {
+            $$ = [$2];
+        }
     | lista_dimensoes '[' inteiro_literal ']'
+        {
+            $$ = $1.concat($3);
+        }
     ;
 
 inteiro_literal
     : NUMERO
+        {
+            $$ = Number(yytext);
+        }
     | BINARIO
+        {
+            $$ = parseInt(yytext.substring(2), 2);
+        }
     | HEX
+        {
+            $$ = parseInt(yytext.substring(2), 16);
+        }
     | OCT
+        {
+            $$ = parseInt(yytext.substring(2), 8);
+        }
     ;
 
 
 tipo_primitivo-plural
     : INTEIROS
         {
-            $$ = yytext;
+            $$ = 'INTEIROS';
         }
     | REAIS
         {
-            $$ = yytext;
+            $$ = 'REAIS';
         }
     | CARACTERES
         {
-            $$ = yytext;
+            $$ = 'CARACTERES';
         }
     | LITERAIS
         {
-            $$ = yytext;
+            $$ = 'LITERAIS';
         }
     | LOGICOS
         {
-            $$ = yytext;
+            $$ = 'LOGICOS';
         }
     ;
 
