@@ -225,7 +225,12 @@ single_quote          [']
 %left '^'
 %right '!'
 %right '%'
+%right ATRIBUI
 %left UMINUS
+%right ENTAO SENAO
+%left '|' '&'
+%left OU E
+%nonassoc '=' '<' '>' MAIORIGUAL MENORIGUAL DIFERENTE
 
 %start programa
 
@@ -238,14 +243,16 @@ programa
     ;
 
 algoritmo
-    : declaracao_algoritmo bloco_declaracao fun_decl_list
-    | declaracao_algoritmo var_decl_block bloco_declaracao fun_decl_list
+    : declaracao_algoritmo var_decl_block bloco_declaracao fun_decl_list_opcional
     ;
-    
+fun_decl_list_opcional
+    : fun_decl_list
+    | %empty
+    ;
+
 fun_decl_list
     : declaracao_funcao
     | fun_decl_list declaracao_funcao
-    | %empty
     ;
 
 declaracao_algoritmo
@@ -259,15 +266,23 @@ var_decl_block
 var-decl-list
     : var_decl ';'
     | var-dec-list var_decl ';'
+    | %empty
     ;
 
 var_decl
-    : IDENTIFICADOR var-list ':' tipo_primitivo
-    | IDENTIFICADOR var-list ':' tipo_matriz
+    : IDENTIFICADOR var-list ':' tipo
+    ;
+
+tipo
+    : tipo_matriz
+    | tipo_primitivo
     ;
 
 var-list
     : var-list ',' IDENTIFICADOR
+    {
+        console.log(yytext);
+    }
     | %empty
     ;
 
@@ -305,13 +320,17 @@ tipo_primitivo-plural
     ;
 
 bloco_declaracao
-    : INICIO lista_declaracao FIM
+    : INICIO lista_declaracao_opcional FIM
+    ;
+
+lista_declaracao_opcional
+    : lista_declaracao
+    | %empty
     ;
 
 lista_declaracao
     : declaracao
     | lista_declaracao declaracao
-    | %empty
     ;
 
 declaracao
@@ -413,10 +432,17 @@ literal
     ;
 
 declaracao_funcao
-    : FUNCAO IDENTIFICADOR "("  ")" declaracao_var_fun bloco_declaracao
-    | FUNCAO IDENTIFICADOR "(" lista_parametros ")" declaracao_var_fun bloco_declaracao
-    | FUNCAO IDENTIFICADOR "("  ")" ":" tipo_primitivo declaracao_var_fun bloco_declaracao
-    | FUNCAO IDENTIFICADOR "(" lista_parametros ")" ":" tipo_primitivo declaracao_var_fun bloco_declaracao
+    : FUNCAO IDENTIFICADOR "(" lista_parametros_opcional ")" tipo_opcional declaracao_var_fun bloco_declaracao
+    ;
+
+tipo_opcional
+    : ":" tipo_primitivo
+    | %empty
+    ;
+
+lista_parametros_opcional
+    : lista_parametros
+    | %empty
     ;
 
 declaracao_var_fun
