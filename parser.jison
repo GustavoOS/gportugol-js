@@ -13,7 +13,7 @@ NUMERO_OCTAL          "0"[cC][0-8]+
 NUMERO_HEXADECIMAL    "0"[xX][0-9a-fA-F]+
 NUMERO_BINARIO        "0"[bB][01]+
 NUMERO_REAL           [0-9]+"."[0-9]+
-IDENTIFICADOR         [a-zA-Z_][a-zA-Z0-9_]*
+ID                    [a-zA-Z"_"][a-zA-Z0-9"_"]*
 
 
 SIMBOLOS              "+"|"-"|"*"|"/"|";"|","|"<"|":"|"@"|"("|")"|"~"|"{"|"}"|"="|"."|"|"|"^"
@@ -105,7 +105,7 @@ single_quote          [']
                         return 'INICIO'
 {i}{n}{t}{e}{i}{r}{o}{s}
                         return 'INTEIROS'
-{i}{n}{t}{e}{i}{r}{o}   return 'INTEIRO'
+{i}{n}{t}{e}{i}{r}{o}   %{console.log("Found INTEIRO");return 'INTEIRO'%}
 {l}{i}{t}{e}{r}{a}{i}{s}
                         return 'LITERAIS'
 {l}{i}{t}{e}{r}{a}{l}   return 'LITERAL'
@@ -151,7 +151,7 @@ single_quote          [']
                             output_error("DECIMAL " + yytext + "\n");
                             return 'NUMERO';
                         %}
-{IDENTIFICADOR}         return 'IDENTIFICADOR'
+{ID}         %{ console.log(yytext); return 'IDENTIFICADOR';%}
 "*"                     return '*'
 "/"                     return '/'
 "-"                     return '-'
@@ -212,6 +212,7 @@ single_quote          [']
 ">="                    return 'MAIORIGUAL'
 "<>"                    return 'DIFERENTE'
 {SIMBOLOS}              %{
+                            console.log("Símbolo " + yytext);
                             return yytext;
                         %}
 .                       return 'INVALID'
@@ -263,27 +264,28 @@ var_decl_block
     : VARIAVEIS var-decl-list FIM-VARIAVEIS
     ;
 
+
 var-decl-list
-    : var_decl ';'
-    | var-dec-list var_decl ';'
+    : var-decl-list var_decl
     | %empty
     ;
 
 var_decl
-    : IDENTIFICADOR var-list ':' tipo
+    : IDENTIFICADOR ':' tipo_singular ';'
+    | IDENTIFICADOR var-list ':' tipo_singular ';'
     ;
 
-tipo
+tipo_singular
     : tipo_matriz
     | tipo_primitivo
     ;
 
 var-list
-    : var-list ',' IDENTIFICADOR
+    : ',' IDENTIFICADOR 
+    | var-list ',' IDENTIFICADOR
     {
-        console.log(yytext);
+        console.log("VAR-LIST " + yytext);
     }
-    | %empty
     ;
 
 tipo_primitivo
