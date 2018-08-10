@@ -16,7 +16,7 @@ NUMERO_REAL           [0-9]+"."[0-9]+
 ID                    [a-zA-Z_][a-zA-Z0-9_]*
 
 
-SIMBOLOS              "+"|"-"|"*"|"/"|";"|","|"<"|":"|"@"|"("|")"|"~"|"{"|"}"|"="|"."|"|"|"^"
+SIMBOLOS              "+"|"-"|"*"|"/"|";"|","|"<"|":"|"@"|"("|")"|"~"|"{"|"}"|"="|"."|"|"|"^"|"["|"]"
 
 a                     [aA]
 b                     [bB]
@@ -212,10 +212,7 @@ double_quote          ["]
 "<="                    return 'MENORIGUAL'
 ">="                    return 'MAIORIGUAL'
 "<>"                    return 'DIFERENTE'
-{SIMBOLOS}              %{
-                            console.log("Símbolo " + yytext);
-                            return yytext;
-                        %}
+{SIMBOLOS}              return yytext
 .                       return 'INVALID'
 
 /lex
