@@ -85,7 +85,7 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
 
-            typeof console !== 'undefined' ? console.log($$[$0-1]) : print($$[$0-1]);
+            console.log(util.inspect($$[$0-1], {depth: null}));
             return $$[$0-1];
         
 break;
@@ -232,7 +232,13 @@ case 30: case 34:
             this.$ = $$[$0-1];
         
 break;
-case 33: case 35: case 36: case 37: case 38:
+case 33:
+
+            this.$ = $$[$0];
+            this.$.acao = "ATRIBUIR";
+        
+break;
+case 35: case 36: case 37: case 38:
 
             this.$ = $$[$0];
         
@@ -253,7 +259,6 @@ break;
 case 45:
    
             this.$ = {
-                op: 'ATRIBUI',
                 esquerda: $$[$0-3],
                 direita: $$[$0-1]
             }
@@ -262,7 +267,6 @@ break;
 case 46:
 
             this.$ = {
-                op: 'ATRIBUI',
                 esquerda: $$[$0-3],
                 direita: $$[$0-1]
             }
@@ -419,8 +423,8 @@ parse: function parse(input) {
     return true;
 }};
 
+    var util = require('util');
     var stringBuffer;
-
     function output_error(message){
         //console.log(message);
     }

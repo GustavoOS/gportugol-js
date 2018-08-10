@@ -1,6 +1,6 @@
 %{
+    var util = require('util');
     var stringBuffer;
-
     function output_error(message){
         //console.log(message);
     }
@@ -238,7 +238,7 @@ double_quote          ["]
 programa
     : algoritmo EOF
         {
-            typeof console !== 'undefined' ? console.log($1) : print($1);
+            console.log(util.inspect($1, {depth: null}));
             return $1;
         }
     ;
@@ -422,6 +422,7 @@ declaracao
     : declaracao_atribuicao
         {
             $$ = $1;
+            $$.acao = "ATRIBUIR";
         }
     | chamada_funcao ';'
         {
@@ -483,7 +484,6 @@ declaracao_atribuicao
     : variavel ATRIBUI expressao ';'
         {   
             $$ = {
-                op: 'ATRIBUI',
                 esquerda: $1,
                 direita: $3
             }
@@ -491,7 +491,6 @@ declaracao_atribuicao
     | acesso_matriz ATRIBUI expressao ';'
         {
             $$ = {
-                op: 'ATRIBUI',
                 esquerda: $1,
                 direita: $3
             }
