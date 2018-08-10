@@ -13,7 +13,7 @@ NUMERO_OCTAL          "0"[cC][0-8]+
 NUMERO_HEXADECIMAL    "0"[xX][0-9a-fA-F]+
 NUMERO_BINARIO        "0"[bB][01]+
 NUMERO_REAL           [0-9]+"."[0-9]+
-ID                    [a-zA-Z"_"][a-zA-Z0-9"_"]*
+ID                    [a-zA-Z_][a-zA-Z0-9_]*
 
 
 SIMBOLOS              "+"|"-"|"*"|"/"|";"|","|"<"|":"|"@"|"("|")"|"~"|"{"|"}"|"="|"."|"|"|"^"
@@ -54,6 +54,7 @@ u_acento              [uUúÚ]
 c_cedilha             [cCçÇ]
 
 single_quote          [']
+double_quote          ["]
 
 
 %x MultiLineComment SingleLineComment quotes
@@ -164,7 +165,7 @@ single_quote          [']
 "PI"                    return 'PI'
 <<EOF>>                 return 'EOF'
 
-<INITIAL>\"             %{
+{double_quote}          %{
                             stringBuffer = "";
                             this.begin("quotes");
                         %}
@@ -418,6 +419,9 @@ argumentos
 
 literal
     : STR_CONST
+    {
+        console.log("String: \'"+ stringBuffer + "\'");
+    }
     | inteiro_literal
     | NUMERO_R
     | C_CONST
