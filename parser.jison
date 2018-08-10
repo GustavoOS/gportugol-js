@@ -257,7 +257,13 @@ algoritmo
 
 fun_decl_list
     : %empty
+        {
+            $$ = [];
+        }
     | fun_decl_list declaracao_funcao
+        {
+            $$ = $1.concat($2);
+        }
     ;
 
 declaracao_algoritmo
