@@ -90,7 +90,7 @@ double_quote          ["]
 {d}{e}                  return 'DE'
 {e}{n}{t}{a}{o}         return 'ENTAO'
 {e}|"&&"                return 'E'
-{f}{a}{c}{a}            return 'FACA'
+{f}{a}{c_cedilha}{a}            return 'FACA'
 {f}{a}{l}{s}{o}         return 'FALSO'
 {f}{i}{m}"-"{e}{n}{q}{u}{a}{n}{t}{o}
                         return 'FIM-ENQUANTO'
