@@ -199,13 +199,13 @@ double_quote          ["]
                         %}
 
 
-{single_quote}"\\n"{single_quote}               %{stringBuffer ="\n"; return C_CONST; %}
-{single_quote}"\\b"{single_quote}               %{stringBuffer = "\b"; return C_CONST; %}
-{single_quote}"\\t"{single_quote}               %{stringBuffer = "\t"; return C_CONST; %}
-{single_quote}"\\n"{single_quote}               %{stringBuffer = "\n"; return C_CONST; %}
-{single_quote}"\\f"{single_quote}               %{stringBuffer = "\f"; return C_CONST; %}
-{single_quote}[^\n]{single_quote}               %{stringBuffer = yytext.slice(1,-1); return C_CONST;%}
-{single_quote}{single_quote}                    %{stringBuffer = ""; return C_CONST;%}
+{single_quote}"\\n"{single_quote}               %{stringBuffer ="\n"; return 'C_CONST'; %}
+{single_quote}"\\b"{single_quote}               %{stringBuffer = "\b"; return 'C_CONST'; %}
+{single_quote}"\\t"{single_quote}               %{stringBuffer = "\t"; return 'C_CONST'; %}
+{single_quote}"\\n"{single_quote}               %{stringBuffer = "\n"; return 'C_CONST'; %}
+{single_quote}"\\f"{single_quote}               %{stringBuffer = "\f"; return 'C_CONST'; %}
+{single_quote}[^\n]{single_quote}               %{stringBuffer = yytext.slice(1,-1); return 'C_CONST';%}
+{single_quote}{single_quote}                    %{stringBuffer = ""; return 'C_CONST';%}
 
 
 ":"\s*"="               %{console.log("ATRIBUI "+ yytext); return 'ATRIBUI';%}
@@ -425,6 +425,9 @@ literal
     | inteiro_literal
     | NUMERO_R
     | C_CONST
+    {
+        console.log("Caractere: " + stringBuffer);
+    }
     | VERDADEIRO
     | FALSO
     ;
