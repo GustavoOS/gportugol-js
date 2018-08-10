@@ -2,7 +2,7 @@
     var stringBuffer;
 
     function output_error(message){
-        console.log(message);
+        //console.log(message);
     }
 %}
 
@@ -106,7 +106,7 @@ double_quote          ["]
                         return 'INICIO'
 {i}{n}{t}{e}{i}{r}{o}{s}
                         return 'INTEIROS'
-{i}{n}{t}{e}{i}{r}{o}   %{console.log("Found INTEIRO");return 'INTEIRO'%}
+{i}{n}{t}{e}{i}{r}{o}   return 'INTEIRO'
 {l}{i}{t}{e}{r}{a}{i}{s}
                         return 'LITERAIS'
 {l}{i}{t}{e}{r}{a}{l}   return 'LITERAL'
@@ -152,7 +152,7 @@ double_quote          ["]
                             output_error("DECIMAL " + yytext + "\n");
                             return 'NUMERO';
                         %}
-{ID}         %{ console.log(yytext); return 'IDENTIFICADOR';%}
+{ID}                    return 'IDENTIFICADOR'
 "*"                     return '*'
 "/"                     return '/'
 "-"                     return '-'
@@ -208,7 +208,7 @@ double_quote          ["]
 {single_quote}{single_quote}                    %{stringBuffer = ""; return 'C_CONST';%}
 
 
-":"\s*"="               %{console.log("ATRIBUI "+ yytext); return 'ATRIBUI';%}
+":"\s*"="               return 'ATRIBUI'
 "<="                    return 'MENORIGUAL'
 ">="                    return 'MAIORIGUAL'
 "<>"                    return 'DIFERENTE'
@@ -237,8 +237,8 @@ double_quote          ["]
 
 programa
     : algoritmo EOF
-    { typeof console !== 'undefined' ? console.log($1) : print($1);
-          return $1; }
+    //{ typeof console !== 'undefined' ? console.log($1) : print($1);
+    //      return $1; }
     ;
 
 algoritmo
@@ -267,6 +267,7 @@ var-decl-list
 
 var_decl
     : IDENTIFICADOR var-list ':' tipo_singular ';'
+    
     ;
 
 tipo_singular
@@ -277,9 +278,6 @@ tipo_singular
 var-list
     : %empty 
     | var-list ',' IDENTIFICADOR
-    {
-        console.log("VAR-LIST " + yytext);
-    }
     ;
 
 tipo_primitivo
@@ -415,16 +413,10 @@ argumentos
     ;
 
 literal
-    : STR_CONST
-    {
-        console.log("String: \'"+ stringBuffer + "\'");
-    }
+    : STR_CONST //use stringBuffer
     | inteiro_literal
     | NUMERO_R
-    | C_CONST
-    {
-        console.log("Caractere: " + stringBuffer);
-    }
+    | C_CONST //use stringBuffer
     | VERDADEIRO
     | FALSO
     ;
