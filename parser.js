@@ -83,20 +83,30 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 
 var $0 = $$.length - 1;
 switch (yystate) {
+case 1:
+
+            typeof console !== 'undefined' ? console.log($$[$0-1]) : print($$[$0-1]);
+            return $$[$0-1];
+        
+break;
 case 2:
 
-        console.log($$[$0-2]);
+        this.$ = {
+            variaveis: $$[$0-2],
+            principal: $$[$0-1],
+            funcoes: $$[$0]
+        }
     
 break;
 case 6:
 this.$ = $$[$0-1]
 break;
-case 7:
+case 7: case 32:
 
             this.$ = $$[$0-1].concat([$$[$0]]);
         
 break;
-case 8:
+case 8: case 31:
 
             this.$ = [];
         
@@ -162,12 +172,12 @@ case 18:
             }
         
 break;
-case 19:
+case 19: case 43:
 
             this.$ = [$$[$0-1]];
         
 break;
-case 20:
+case 20: case 44:
 
             this.$ = $$[$0-3].concat($$[$0-1]);
         
@@ -217,10 +227,46 @@ case 29:
             this.$ = 'LOGICOS';
         
 break;
+case 30: case 34:
+
+            this.$ = $$[$0-1];
+        
+break;
+case 33: case 35: case 36: case 37: case 38:
+
+            this.$ = $$[$0];
+        
+break;
 case 41:
 
         this.$ = yytext;
     
+break;
+case 42:
+
+            this.$ = {
+                valor: $$[$0-1],
+                indices: $$[$0]
+            }
+        
+break;
+case 45:
+   
+            this.$ = {
+                op: 'ATRIBUI',
+                esquerda: $$[$0-3],
+                direita: $$[$0-1]
+            }
+        
+break;
+case 46:
+
+            this.$ = {
+                op: 'ATRIBUI',
+                esquerda: $$[$0-3],
+                direita: $$[$0-1]
+            }
+        
 break;
 }
 },

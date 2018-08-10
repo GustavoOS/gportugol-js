@@ -237,14 +237,20 @@ double_quote          ["]
 
 programa
     : algoritmo EOF
-    //{ typeof console !== 'undefined' ? console.log($1) : print($1);
-    //      return $1; }
+        {
+            typeof console !== 'undefined' ? console.log($1) : print($1);
+            return $1;
+        }
     ;
 
 algoritmo
     : declaracao_algoritmo var_decl_block bloco_declaracao fun_decl_list
     {
-        console.log($2);
+        $$ = {
+            variaveis: $2,
+            principal: $3,
+            funcoes: $4
+        }
     }
     ;
 
@@ -395,21 +401,48 @@ tipo_primitivo-plural
 
 bloco_declaracao
     : INICIO lista_declaracao FIM
+        {
+            $$ = $2;
+        }
     ;
 
 
 lista_declaracao
     : %empty
+        {
+            $$ = [];
+        }
     | lista_declaracao declaracao
+        {
+            $$ = $1.concat([$2]);
+        }
     ;
 
 declaracao
     : declaracao_atribuicao
+        {
+            $$ = $1;
+        }
     | chamada_funcao ';'
+        {
+            $$ = $1;
+        }
     | declaracao_retorno
+        {
+            $$ = $1;
+        }
     | declaracao_se
+        {
+            $$ = $1;
+        }
     | declaracao_enquanto
+        {
+            $$ = $1;
+        }
     | declaracao_para
+        {
+            $$ = $1;
+        }
     ;
 
 declaracao_retorno
@@ -427,16 +460,42 @@ variavel
 
 acesso_matriz
     : variavel lista_indices
+        {
+            $$ = {
+                valor: $1,
+                indices: $2
+            }
+        }
     ;
 
 lista_indices
     : '['expressao']'
+        {
+            $$ = [$2];
+        }
     | lista_indices '[' expressao ']'
+        {
+            $$ = $1.concat($3);
+        }
     ;
 
 declaracao_atribuicao
     : variavel ATRIBUI expressao ';'
+        {   
+            $$ = {
+                op: 'ATRIBUI',
+                esquerda: $1,
+                direita: $3
+            }
+        }
     | acesso_matriz ATRIBUI expressao ';'
+        {
+            $$ = {
+                op: 'ATRIBUI',
+                esquerda: $1,
+                direita: $3
+            }
+        }
     ;
 
 declaracao_se
