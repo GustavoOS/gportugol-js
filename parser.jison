@@ -208,7 +208,7 @@ double_quote          ["]
 {single_quote}{single_quote}                    %{stringBuffer = ""; return C_CONST;%}
 
 
-":="                    return 'ATRIBUI'
+":"\s*"="               return 'ATRIBUI'
 "<="                    return 'MENORIGUAL'
 ">="                    return 'MAIORIGUAL'
 "<>"                    return 'DIFERENTE'
