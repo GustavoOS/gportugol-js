@@ -244,15 +244,12 @@ programa
     ;
 
 algoritmo
-    : declaracao_algoritmo var_decl_block bloco_declaracao fun_decl_list_opcional
-    ;
-fun_decl_list_opcional
-    : fun_decl_list
-    | %empty
+    : declaracao_algoritmo var_decl_block bloco_declaracao fun_decl_list
     ;
 
+
 fun_decl_list
-    : declaracao_funcao
+    : %empty
     | fun_decl_list declaracao_funcao
     ;
 
@@ -271,8 +268,7 @@ var-decl-list
     ;
 
 var_decl
-    : IDENTIFICADOR ':' tipo_singular ';'
-    | IDENTIFICADOR var-list ':' tipo_singular ';'
+    : IDENTIFICADOR var-list ':' tipo_singular ';'
     ;
 
 tipo_singular
@@ -281,7 +277,7 @@ tipo_singular
     ;
 
 var-list
-    : ',' IDENTIFICADOR 
+    : %empty 
     | var-list ',' IDENTIFICADOR
     {
         console.log("VAR-LIST " + yytext);
@@ -322,16 +318,12 @@ tipo_primitivo-plural
     ;
 
 bloco_declaracao
-    : INICIO lista_declaracao_opcional FIM
+    : INICIO lista_declaracao FIM
     ;
 
-lista_declaracao_opcional
-    : lista_declaracao
-    | %empty
-    ;
 
 lista_declaracao
-    : declaracao
+    : %empty
     | lista_declaracao declaracao
     ;
 
