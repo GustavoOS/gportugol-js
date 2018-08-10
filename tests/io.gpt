@@ -1,6 +1,6 @@
 algoritmo io;
 variáveis
-    c: caractere;
+    c, b: caractere;
     i: inteiro;
     r: real;
     l: literal;

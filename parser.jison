@@ -243,6 +243,9 @@ programa
 
 algoritmo
     : declaracao_algoritmo var_decl_block bloco_declaracao fun_decl_list
+    {
+        console.log($2);
+    }
     ;
 
 
@@ -257,6 +260,7 @@ declaracao_algoritmo
 
 var_decl_block
     : VARIAVEIS var-decl-list FIM-VARIAVEIS
+    {$$ = $2}
     ;
 
 
@@ -266,8 +270,10 @@ var-decl-list
     ;
 
 var_decl
-    : IDENTIFICADOR var-list ':' tipo_singular ';'
-    
+    : var-list ':' tipo_singular ';'
+    {
+
+    }
     ;
 
 tipo_singular
@@ -275,9 +281,18 @@ tipo_singular
     | tipo_primitivo
     ;
 
+
 var-list
-    : %empty 
-    | var-list ',' IDENTIFICADOR
+    : variavel
+        {
+            $$ = [$1];
+            console.log($$);
+        }
+    | var-list ',' variavel
+        {
+            $$ = $1.concat([$3]);
+            console.log($$);
+        }
     ;
 
 tipo_primitivo
@@ -307,10 +322,25 @@ inteiro_literal
 
 tipo_primitivo-plural
     : INTEIROS
+        {
+            $$ = yytext;
+        }
     | REAIS
+        {
+            $$ = yytext;
+        }
     | CARACTERES
+        {
+            $$ = yytext;
+        }
     | LITERAIS
+        {
+            $$ = yytext;
+        }
     | LOGICOS
+        {
+            $$ = yytext;
+        }
     ;
 
 bloco_declaracao
@@ -337,9 +367,16 @@ declaracao_retorno
     | RETORNE expressao ';'
     ;
 
-lvalue
-    : IDENTIFICADOR lista_indices
-    | IDENTIFICADOR
+
+variavel
+    : IDENTIFICADOR
+    {
+        $$ = yytext;
+    }
+    ;
+
+acesso_matriz
+    : variavel lista_indices
     ;
 
 lista_indices
@@ -348,7 +385,8 @@ lista_indices
     ;
 
 declaracao_atribuicao
-    : lvalue ATRIBUI expressao ';'
+    : variavel ATRIBUI expressao ';'
+    | acesso_matriz ATRIBUI expressao ';'
     ;
 
 declaracao_se
@@ -361,12 +399,13 @@ declaracao_enquanto
     ;
 
 declaracao_para
-    : PARA lvalue DE expressao ATE expressao FACA lista_declaracao FIM-PARA
-    | PARA lvalue DE expressao ATE expressao passo_mudanca FACA lista_declaracao FIM-PARA
+    : PARA variavel DE expressao ATE expressao FACA lista_declaracao FIM-PARA
+    | PARA acesso_matriz DE expressao ATE expressao FACA lista_declaracao FIM-PARA
     ;
     
 passo_mudanca
-    : PASSO inteiro_literal
+    : %empty
+    | PASSO inteiro_literal
     | PASSO '+' inteiro_literal
     | PASSO '-' inteiro_literal
     ;
@@ -397,7 +436,8 @@ expressao
 
 termo
     : chamada_funcao
-    | lvalue
+    | variavel
+    | acesso_matriz
     | literal
     | "(" expressao ")"
     ;
