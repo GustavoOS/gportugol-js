@@ -208,7 +208,7 @@ double_quote          ["]
 {single_quote}{single_quote}                    %{stringBuffer = ""; return C_CONST;%}
 
 
-":"\s*"="               return 'ATRIBUI'
+":"\s*"="               %{console.log("ATRIBUI "+ yytext); return 'ATRIBUI';%}
 "<="                    return 'MENORIGUAL'
 ">="                    return 'MAIORIGUAL'
 "<>"                    return 'DIFERENTE'
@@ -353,7 +353,7 @@ lista_indices
     ;
 
 declaracao_atribuicao
-    : lvalue ATRIBUI expr ';'
+    : lvalue ATRIBUI expressao ';'
     ;
 
 declaracao_se
