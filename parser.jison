@@ -16,7 +16,6 @@ NUMERO_REAL           [0-9]+"."[0-9]+
 IDENTIFICADOR         [a-zA-Z_][a-zA-Z0-9_]*
 
 
-ESPECIAIS            ":="|"<="|">="|"<>"
 SIMBOLOS              "+"|"-"|"*"|"/"|";"|","|"<"|":"|"@"|"("|")"|"~"|"{"|"}"|"="|"."|"|"|"^"
 
 a                     [aA]
@@ -208,9 +207,10 @@ single_quote          [']
 {single_quote}{single_quote}                    %{stringBuffer = ""; return C_CONST;%}
 
 
-{ESPECIAIS}            %{
-                            return yytext;
-                        %}                       
+":="                    return 'ATRIBUI'
+"<="                    return 'MENORIGUAL'
+">="                    return 'MAIORIGUAL'
+"<>"                    return 'DIFERENTE'
 {SIMBOLOS}              %{
                             return yytext;
                         %}
@@ -339,7 +339,7 @@ lista_indices
     ;
 
 declaracao_atribuicao
-    : lvalue ':=' expr ';'
+    : lvalue ATRIBUI expr ';'
     ;
 
 declaracao_se
@@ -369,11 +369,11 @@ expressao
     | expressao "^" expressao
     | expressao "&" expressao
     | expressao "=" expressao
-    | expressao "<>" expressao
+    | expressao DIFERENTE expressao
     | expressao ">" expressao
-    | expressao ">=" expressao
+    | expressao MAIORIGUAL expressao
     | expressao "<" expressao
-    | expressao "<=" expressao
+    | expressao MENORIGUAL expressao
     | expressao "+" expressao
     | expressao "-" expressao
     | expressao "/" expressao
