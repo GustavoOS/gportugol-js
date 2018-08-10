@@ -88,7 +88,7 @@ double_quote          ["]
 {e}{n}{q}{u}{a}{n}{t}{o}
                         return 'ENQUANTO'
 {d}{e}                  return 'DE'
-{e}{n}{t}{a}{o}         return 'ENTAO'
+{e}{n}{t}{a_acento}{o}         return 'ENTAO'
 {e}|"&&"                return 'E'
 {f}{a}{c_cedilha}{a}    return 'FACA'
 {f}{a}{l}{s}{o}         return 'FALSO'
