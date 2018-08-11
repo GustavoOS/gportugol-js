@@ -247,6 +247,7 @@ algoritmo
     : declaracao_algoritmo var_decl_block bloco_declaracao fun_decl_list
     {
         $$ = {
+            algoritmo: $1,
             variaveis: $2,
             principal: $3,
             funcoes: $4
@@ -268,6 +269,9 @@ fun_decl_list
 
 declaracao_algoritmo
     : ALGORITMO IDENTIFICADOR ';'
+        {
+            $$ = $2;
+        }
     ;
 
 var_decl_block

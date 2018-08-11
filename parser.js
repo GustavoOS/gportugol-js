@@ -92,6 +92,7 @@ break;
 case 2:
 
         this.$ = {
+            algoritmo: $$[$0-3],
             variaveis: $$[$0-2],
             principal: $$[$0-1],
             funcoes: $$[$0]
@@ -106,6 +107,11 @@ break;
 case 4: case 7: case 32:
 
             this.$ = $$[$0-1].concat([$$[$0]]);
+        
+break;
+case 5: case 30: case 34:
+
+            this.$ = $$[$0-1];
         
 break;
 case 6:
@@ -223,11 +229,6 @@ break;
 case 29:
 
             this.$ = 'LOGICOS';
-        
-break;
-case 30: case 34:
-
-            this.$ = $$[$0-1];
         
 break;
 case 33:
