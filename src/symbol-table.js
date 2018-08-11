@@ -68,5 +68,11 @@ describe('Inserção de símbolos', function () {
     it('Verifica se inserção não colide', function () {
         table.addSymbol("Joao");
         expect(table.scopes.algoritmo).toEqual(["Joao"]);
-    })
+    });
+
+    it("Inserção em dois escopos e mesmo nome", function(){
+        table.addSymbol("Joao", Teste().scopes[1]);
+        expect(table.scopes[Teste().scopes[1]]).toEqual(["Joao"]);
+        expect(table.scopes.algoritmo.length).toBe(1);
+    });
 });
