@@ -98,18 +98,18 @@ case 2:
         }
     
 break;
-case 6:
-this.$ = $$[$0-1]
+case 3: case 8: case 31:
+
+            this.$ = [];
+        
 break;
-case 7: case 32:
+case 4: case 7: case 32:
 
             this.$ = $$[$0-1].concat([$$[$0]]);
         
 break;
-case 8: case 31:
-
-            this.$ = [];
-        
+case 6:
+this.$ = $$[$0-1]
 break;
 case 9:
 

@@ -262,7 +262,7 @@ fun_decl_list
         }
     | fun_decl_list declaracao_funcao
         {
-            $$ = $1.concat($2);
+            $$ = $1.concat([$2]);
         }
     ;
 
