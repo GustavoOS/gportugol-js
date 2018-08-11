@@ -4,6 +4,16 @@
     function output_error(message){
         //console.log(message);
     }
+
+    function Expressao(op, esquerda, direita){
+        this.op = op;
+        this.esquerda = esquerda;
+        this.direita = direita;
+    }
+    function Unario(op, direita){
+        this.op = op;
+        this.direita = direita;
+    }
 %}
 
 /* lexical grammar */
@@ -528,26 +538,89 @@ passo_mudanca
 
 expressao
     : expressao OU expressao
+        {
+            $$ = new Expressao('OU-LÓGICO', $1, $3);
+        }
     | expressao E expressao
+        {
+            $$ = new Expressao('E-LOGICO', $1, $3);
+        }
     | expressao "|" expressao
+        {
+            $$ = new Expressao('OU-BIT-A-BIT', $1, $3);
+        }
     | expressao "^" expressao
+        {
+            $$ = new Expressao('OU-EXCLUSIVO-BIT-A-BIT', $1, $3);
+        }
     | expressao "&" expressao
+        {
+            $$ = new Expressao('E-BIT-A-BIT', $1, $3);
+        }
     | expressao "=" expressao
+        {
+            $$ = new Expressao('COMPARA-IGUALDADE', $1, $3);
+        }
     | expressao DIFERENTE expressao
+        {
+            $$ = new Expressao('COMPARA-DIFERENCA', $1, $3);
+        }
     | expressao ">" expressao
+        {
+            $$ = new Expressao('COMPARA-MAIOR', $1, $3);
+        }
     | expressao MAIORIGUAL expressao
+        {
+            $$ = new Expressao('COMPARA-MAIOR-IGUAL', $1, $3);
+        }
     | expressao "<" expressao
+        {
+            $$ = new Expressao('COMPARA-MENOR', $1, $3);
+        }
     | expressao MENORIGUAL expressao
+        {
+            $$ = new Expressao('COMPARA-MENOR-IGUAL', $1, $3);
+        }
     | expressao "+" expressao
+        {
+            $$ = new Expressao('SOMA', $1, $3);
+        }
     | expressao "-" expressao
+        {
+            $$ = new Expressao('SUBTRAI', $1, $3);
+        }
     | expressao "/" expressao
+        {
+            $$ = new Expressao('DIVIDE', $1, $3);
+        }
     | expressao "*" expressao
+        {
+            $$ = new Expressao('MULTIPLICA', $1, $3);
+        }
     | expressao "%" expressao
+        {
+            $$ = new Expressao('RESTO', $1, $3);
+        }
     | "+" termo
+        {
+            $$ = new Unario('POSITIVO', $2);
+        }
     | "-" termo
+        {
+            $$ = new Unario('NEGATIVO', $2);
+        }
     | "~" termo
+        {
+            $$ = new Unario('NAO-BINARIO', $2);
+        }
     | NAO termo
+        {
+            $$ = new Unario('NAO-LOGICO', $2);
+        }
     | termo
+        {
+            $$ = $1;
+        }
     ;
 
 termo
@@ -559,13 +632,28 @@ termo
     ;
 
 chamada_funcao
-    : IDENTIFICADOR "(" argumentos ")"
-    | IDENTIFICADOR "(" ")"
+    : IDENTIFICADOR "(" lista-argumentos ")"
+    ;
+lista-argumentos
+    : %empty
+        {
+            $$ = [];
+        }
+    | argumentos
+        {
+            $$ = $1;
+        }
     ;
 
 argumentos
     : expressao
+        {
+            $$ = [$1];
+        }
     | argumentos ',' expressao
+        {
+            $$ = $1.concat($3);
+        }
     ;
 
 literal
