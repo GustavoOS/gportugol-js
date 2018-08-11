@@ -625,6 +625,9 @@ expressao
 
 termo
     : chamada_funcao
+        {
+            $$ = $1;
+        }
     | variavel
     | acesso_matriz
     | literal
@@ -633,6 +636,13 @@ termo
 
 chamada_funcao
     : IDENTIFICADOR "(" lista-argumentos ")"
+        {
+            $$ = {
+                op: 'CHAMADA-FUNCAO',
+                nome: $1,
+                argumentos: $3
+            }
+        }
     ;
 lista-argumentos
     : %empty

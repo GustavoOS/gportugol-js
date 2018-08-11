@@ -237,7 +237,7 @@ case 33:
             this.$.acao = "ATRIBUIR";
         
 break;
-case 35: case 36: case 37: case 38: case 76: case 84:
+case 35: case 36: case 37: case 38: case 76: case 77: case 84:
 
             this.$ = $$[$0];
         
@@ -369,6 +369,15 @@ break;
 case 75:
 
             this.$ = new Unario('NAO-LOGICO', $$[$0]);
+        
+break;
+case 82:
+
+            this.$ = {
+                op: 'CHAMADA-FUNCAO',
+                nome: $$[$0-3],
+                argumentos: $$[$0-1]
+            }
         
 break;
 case 86:
