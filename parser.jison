@@ -1,8 +1,18 @@
 %{
+    var util = require('util');
     var stringBuffer;
-
     function output_error(message){
-        console.log(message);
+        //console.log(message);
+    }
+
+    function Expressao(op, esquerda, direita){
+        this.op = op;
+        this.esquerda = esquerda;
+        this.direita = direita;
+    }
+    function Unario(op, direita){
+        this.op = op;
+        this.direita = direita;
     }
 %}
 
@@ -13,7 +23,10 @@ NUMERO_OCTAL          "0"[cC][0-8]+
 NUMERO_HEXADECIMAL    "0"[xX][0-9a-fA-F]+
 NUMERO_BINARIO        "0"[bB][01]+
 NUMERO_REAL           [0-9]+"."[0-9]+
-IDENTIFICADOR         [a-zA-Z_][a-zA-Z0-9_]*
+ID                    [a-zA-Z_][a-zA-Z0-9_]*
+
+
+SIMBOLOS              "+"|"-"|"*"|"/"|";"|","|"<"|":"|"@"|"("|")"|"~"|"{"|"}"|"="|"."|"|"|"^"|"["|"]"
 
 a                     [aA]
 b                     [bB]
@@ -51,6 +64,7 @@ u_acento              [uUúÚ]
 c_cedilha             [cCçÇ]
 
 single_quote          [']
+double_quote          ["]
 
 
 %x MultiLineComment SingleLineComment quotes
@@ -84,9 +98,9 @@ single_quote          [']
 {e}{n}{q}{u}{a}{n}{t}{o}
                         return 'ENQUANTO'
 {d}{e}                  return 'DE'
-{e}{n}{t}{a}{o}         return 'ENTAO'
-{e}                     return 'E'
-{f}{a}{c}{a}            return 'FACA'
+{e}{n}{t}{a_acento}{o}  return 'ENTAO'
+{e}|"&&"                return 'E'
+{f}{a}{c_cedilha}{a}    return 'FACA'
 {f}{a}{l}{s}{o}         return 'FALSO'
 {f}{i}{m}"-"{e}{n}{q}{u}{a}{n}{t}{o}
                         return 'FIM-ENQUANTO'
@@ -112,7 +126,7 @@ single_quote          [']
                         return 'LOGICO'
 {m}{a}{t}{r}{i}{z}      return 'MATRIZ'
 {n}{a_acento}{o}        return 'NAO'
-{o}{u}                  return 'OU'
+{o}{u}|"||"             return 'OU'
 {p}{a}{r}{a}            return 'PARA'
 {p}{a}{s}{s}{o}         return 'PASSO'
 {r}{e}{a}{l}            return 'REAL'
@@ -142,13 +156,13 @@ single_quote          [']
                         %}
 {NUMERO_REAL}           %{
                             output_error("REAL "+ yytext + "\n");
-                            return 'NUMERO';
+                            return 'NUMERO_R';
                         %}
 {NUMERO_DECIMAL}        %{
                             output_error("DECIMAL " + yytext + "\n");
                             return 'NUMERO';
                         %}
-{IDENTIFICADOR}         return 'IDENTIFICADOR'
+{ID}                    return 'IDENTIFICADOR'
 "*"                     return '*'
 "/"                     return '/'
 "-"                     return '-'
@@ -161,7 +175,7 @@ single_quote          [']
 "PI"                    return 'PI'
 <<EOF>>                 return 'EOF'
 
-<INITIAL>\"             %{
+{double_quote}          %{
                             stringBuffer = "";
                             this.begin("quotes");
                         %}
@@ -195,15 +209,20 @@ single_quote          [']
                         %}
 
 
-{single_quote}"\\n"{single_quote}               %{stringBuffer ="\n"; return C_CONST; %}
-{single_quote}"\\b"{single_quote}               %{stringBuffer = "\b"; return C_CONST; %}
-{single_quote}"\\t"{single_quote}               %{stringBuffer = "\t"; return C_CONST; %}
-{single_quote}"\\n"{single_quote}               %{stringBuffer = "\n"; return C_CONST; %}
-{single_quote}"\\f"{single_quote}               %{stringBuffer = "\f"; return C_CONST; %}
-{single_quote}[^\n]{single_quote}               %{stringBuffer = yytext.slice(1,-1); return C_CONST;%}
-{single_quote}{single_quote}                    %{stringBuffer = ""; return C_CONST;%}
+{single_quote}"\\n"{single_quote}               %{stringBuffer ="\n"; return 'C_CONST'; %}
+{single_quote}"\\b"{single_quote}               %{stringBuffer = "\b"; return 'C_CONST'; %}
+{single_quote}"\\t"{single_quote}               %{stringBuffer = "\t"; return 'C_CONST'; %}
+{single_quote}"\\n"{single_quote}               %{stringBuffer = "\n"; return 'C_CONST'; %}
+{single_quote}"\\f"{single_quote}               %{stringBuffer = "\f"; return 'C_CONST'; %}
+{single_quote}[^\n]{single_quote}               %{stringBuffer = yytext.slice(1,-1); return 'C_CONST';%}
+{single_quote}{single_quote}                    %{stringBuffer = ""; return 'C_CONST';%}
 
 
+":"\s*"="               return 'ATRIBUI'
+"<="                    return 'MENORIGUAL'
+">="                    return 'MAIORIGUAL'
+"<>"                    return 'DIFERENTE'
+{SIMBOLOS}              return yytext
 .                       return 'INVALID'
 
 /lex
@@ -215,107 +234,613 @@ single_quote          [']
 %left '^'
 %right '!'
 %right '%'
+%right ATRIBUI
 %left UMINUS
+%right ENTAO SENAO
+%left '|' '&'
+%left OU E
+%nonassoc '=' '<' '>' MAIORIGUAL MENORIGUAL DIFERENTE
 
-%start expressions
+%start programa
 
 %% /* language grammar */
 
-expressions
-    : e EOF
-        { typeof console !== 'undefined' ? output_error($1) : print($1);
-          return $1; }
+programa
+    : algoritmo EOF
+        {
+            console.log(util.inspect($1, {depth: null, compact: false, colors: true}));
+            return $1;
+        }
     ;
 
-e
-    : e '+' e
-        {$$ = $1+$3;}
-    | e '-' e
-        {$$ = $1-$3;}
-    | e '*' e
-        {$$ = $1*$3;}
-    | e '/' e
-        {$$ = $1/$3;}
-    | e '^' e
-        {$$ = Math.pow($1, $3);}
-    | e '!'
-        {{
-          $$ = (function fact (n) { return n==0 ? 1 : fact(n-1) * n })($1);
-        }}
-    | e '%'
-        {$$ = $1/100;}
-    | '-' e %prec UMINUS
-        {$$ = -$2;}
-    | '(' e ')'
-        {$$ = $2;}
-    | NUMERO
-        {$$ = Number(yytext);}
+algoritmo
+    : declaracao_algoritmo var_decl_block bloco_declaracao fun_decl_list
+    {
+        $$ = {
+            nome: $1,
+            variaveis: $2,
+            corpo: $3,
+            funcoes: $4
+        }
+    }
+    ;
+
+
+fun_decl_list
+    : %empty
+        {
+            $$ = [];
+        }
+    | fun_decl_list declaracao_funcao
+        {
+            $$ = $1.concat([$2]);
+        }
+    ;
+
+declaracao_algoritmo
+    : ALGORITMO IDENTIFICADOR ';'
+        {
+            $$ = $2;
+        }
+    ;
+
+var_decl_block
+    : VARIAVEIS var-decl-list FIM-VARIAVEIS
+    {$$ = $2}
+    ;
+
+
+var-decl-list
+    : var-decl-list var_decl
+        {
+            $$ = $1.concat([$2]);
+        }
+    | %empty
+        {
+            $$ = [];
+        }
+    ;
+
+var_decl
+    : var-list ':' tipo_matriz ';'
+    {
+        $$ = {
+            variaveis: $1,
+            tipo: $3
+        }
+    }
+    | var-list ':' tipo_primitivo ';'
+        {
+            $$ = {
+                variaveis: $1,
+                tipo: $3
+            }
+        }
+    ;
+
+
+var-list
+    : variavel
+        {
+            $$ = [$1];
+        }
+    | var-list ',' variavel
+        {
+            $$ = $1.concat([$3]);
+        }
+    ;
+
+tipo_primitivo
+    : INTEIRO
+        {
+            $$ = 'INTEIRO';
+        }
+    | REAL
+        {
+            $$ = 'REAL';
+        }
+    | CARACTERE
+        {
+            $$ = 'CARACTERE';
+        }
+    | LITERAL
+        {
+            $$ = 'LITERAL';
+        }
+    | LOGICO
+        {
+            $$ = 'LOGICO';
+        }
+    ;
+
+tipo_matriz
+    : MATRIZ lista_dimensoes DE tipo_primitivo-plural
+        {
+            $$ = {
+                dimensoes: $2,
+                tipo: $4
+            }
+        }
+    ;
+
+lista_dimensoes
+    : '[' inteiro_literal ']'
+        {
+            $$ = [$2];
+        }
+    | lista_dimensoes '[' inteiro_literal ']'
+        {
+            $$ = $1.concat($3);
+        }
+    ;
+
+inteiro_literal
+    : NUMERO
+        {
+            $$ = Number(yytext);
+        }
     | BINARIO
         {
-
             $$ = parseInt(yytext.substring(2), 2);
-        }
-    | OCT
-        {
-            $$ = parseInt(yytext.substring(2), 8);
         }
     | HEX
         {
             $$ = parseInt(yytext.substring(2), 16);
         }
-
-    | palavras-reservadas
+    | OCT
         {
-            $$ = 1;
-            output_error("palavra reservada" + $1);
-        }
-    | IDENTIFICADOR
-        {
-            $$ = 2;
-        }
-    | PI
-        {$$ = Math.PI;}
-    | STR_CONST
-        {
-            $$ = Number(stringBuffer);
+            $$ = parseInt(yytext.substring(2), 8);
         }
     ;
 
-palavras-reservadas
-    : FIM-VARIAVEIS { $$ = yytext;}
-    | ALGORITMO { $$ = yytext;}
-    | VARIAVEIS { $$ = yytext;}
-    | INTEIRO { $$ = yytext;}
-    | REAL { $$ = yytext;}
-    | CARACTERE { $$ = yytext;}
-    | LITERAL { $$ = yytext;}
-    | LOGICO { $$ = yytext;}
-    | INICIO { $$ = yytext;}
-    | VERDADEIRO { $$ = yytext;}
-    | FALSO { $$ = yytext;}
-    | FIM { $$ = yytext;}
-    | OU { $$ = yytext;}
-    | E { $$ = yytext;}
-    | NAO { $$ = yytext;}
-    | SE { $$ = yytext;}
-    | SENAO { $$ = yytext;}
-    | ENTAO { $$ = yytext;}
-    | FIM-SE { $$ = yytext;}
-    | ENQUANTO { $$ = yytext;}
-    | FACA { $$ = yytext;}
-    | FIM-ENQUANTO { $$ = yytext;}
-    | PARA { $$ = yytext;}
-    | DE { $$ = yytext;}
-    | ATE { $$ = yytext;}
-    | FIM-PARA { $$ = yytext;}
-    | MATRIZ { $$ = yytext;}
-    | INTEIROS { $$ = yytext;}
-    | REAIS { $$ = yytext;}
-    | CARACTERES { $$ = yytext;}
-    | LITERAIS { $$ = yytext;}
-    | LOGICOS { $$ = yytext;}
-    | FUNCAO { $$ = yytext;}
-    | RETORNE { $$ = yytext;}
-    | PASSO { $$ = yytext;}
+
+tipo_primitivo-plural
+    : INTEIROS
+        {
+            $$ = 'INTEIROS';
+        }
+    | REAIS
+        {
+            $$ = 'REAIS';
+        }
+    | CARACTERES
+        {
+            $$ = 'CARACTERES';
+        }
+    | LITERAIS
+        {
+            $$ = 'LITERAIS';
+        }
+    | LOGICOS
+        {
+            $$ = 'LOGICOS';
+        }
+    ;
+
+bloco_declaracao
+    : INICIO lista_declaracao FIM
+        {
+            $$ = $2;
+        }
+    ;
+
+
+lista_declaracao
+    : %empty
+        {
+            $$ = [];
+        }
+    | lista_declaracao declaracao
+        {
+            $$ = $1.concat([$2]);
+        }
+    ;
+
+declaracao
+    : declaracao_atribuicao
+        {
+            $$ = $1;
+            $$.acao = "ATRIBUIR";
+        }
+    | chamada_funcao ';'
+        {
+            $$ = $1;
+        }
+    | declaracao_retorno
+        {
+            $$ = $1;
+        }
+    | declaracao_se
+        {
+            $$ = $1;
+        }
+    | declaracao_enquanto
+        {
+            $$ = $1;
+        }
+    | declaracao_para
+        {
+            $$ = $1;
+        }
+    ;
+
+declaracao_retorno
+    : RETORNE ';'
+        {
+            $$ = {
+                acao: 'RETORNE'
+            };
+        }
+    | RETORNE expressao ';'
+        {
+            $$ = {
+                acao: 'RETORNE',
+                expressao: $2
+            }
+        }
+    ;
+
+
+variavel
+    : IDENTIFICADOR
+    {
+        $$ = yytext;
+    }
+    ;
+
+acesso_matriz
+    : variavel lista_indices
+        {
+            $$ = {
+                valor: $1,
+                indices: $2
+            }
+        }
+    ;
+
+lista_indices
+    : '['expressao']'
+        {
+            $$ = [$2];
+        }
+    | lista_indices '[' expressao ']'
+        {
+            $$ = $1.concat($3);
+        }
+    ;
+
+declaracao_atribuicao
+    : variavel ATRIBUI expressao ';'
+        {   
+            $$ = {
+                esquerda: $1,
+                direita: $3
+            }
+        }
+    | acesso_matriz ATRIBUI expressao ';'
+        {
+            $$ = {
+                esquerda: $1,
+                direita: $3
+            }
+        }
+    ;
+
+declaracao_se
+    : SE expressao ENTAO lista_declaracao FIM-SE
+        {
+            $$ = {
+                acao: 'SE',
+                condicao: $2,
+                corpo: $4
+            }
+        }
+    | SE expressao ENTAO lista_declaracao SENAO lista_declaracao FIM-SE
+        {
+            $$ = {
+                acao: 'SE',
+                condicao: $2,
+                corpo: $4,
+                senao: $6
+            }
+        }
+    ;
+
+declaracao_enquanto
+    : ENQUANTO expressao FACA lista_declaracao FIM-ENQUANTO
+        {
+            $$ = {
+                acao: 'ENQUANTO',
+                condicao: $2,
+                corpo: $4
+            }
+        }
+    ;
+
+declaracao_para
+    : PARA variavel DE expressao ATE expressao passo_mudanca FACA lista_declaracao FIM-PARA
+        {
+            $$ = {
+                acao: 'PARA',
+                variavel: $2,
+                de: $4,
+                ate: $6,
+                passo: $7,
+                corpo: $9
+            }
+        }
+    | PARA acesso_matriz DE expressao ATE expressao passo_mudanca FACA lista_declaracao FIM-PARA
+        {
+            $$ = {
+                acao: 'PARA',
+                variavel: $2,
+                de: $4,
+                ate: $6,
+                passo: $7,
+                corpo: $9
+            }
+        }
+    ;
+    
+passo_mudanca
+    : %empty
+        {
+            $$ = {}
+        }
+    | PASSO inteiro_literal
+        {
+            $$ = new Unario('SOMA', $2);
+        }
+    | PASSO '+' inteiro_literal
+        {
+            $$ = new Unario('SOMA', $2);
+        }
+    | PASSO '-' inteiro_literal
+        {
+            $$ = new Unario('SUBTRAI', $2);
+        }
+    ;
+
+expressao
+    : expressao OU expressao
+        {
+            $$ = new Expressao('OU-LÓGICO', $1, $3);
+        }
+    | expressao E expressao
+        {
+            $$ = new Expressao('E-LOGICO', $1, $3);
+        }
+    | expressao "|" expressao
+        {
+            $$ = new Expressao('OU-BIT-A-BIT', $1, $3);
+        }
+    | expressao "^" expressao
+        {
+            $$ = new Expressao('OU-EXCLUSIVO-BIT-A-BIT', $1, $3);
+        }
+    | expressao "&" expressao
+        {
+            $$ = new Expressao('E-BIT-A-BIT', $1, $3);
+        }
+    | expressao "=" expressao
+        {
+            $$ = new Expressao('COMPARA-IGUALDADE', $1, $3);
+        }
+    | expressao DIFERENTE expressao
+        {
+            $$ = new Expressao('COMPARA-DIFERENCA', $1, $3);
+        }
+    | expressao ">" expressao
+        {
+            $$ = new Expressao('COMPARA-MAIOR', $1, $3);
+        }
+    | expressao MAIORIGUAL expressao
+        {
+            $$ = new Expressao('COMPARA-MAIOR-IGUAL', $1, $3);
+        }
+    | expressao "<" expressao
+        {
+            $$ = new Expressao('COMPARA-MENOR', $1, $3);
+        }
+    | expressao MENORIGUAL expressao
+        {
+            $$ = new Expressao('COMPARA-MENOR-IGUAL', $1, $3);
+        }
+    | expressao "+" expressao
+        {
+            $$ = new Expressao('SOMA', $1, $3);
+        }
+    | expressao "-" expressao
+        {
+            $$ = new Expressao('SUBTRAI', $1, $3);
+        }
+    | expressao "/" expressao
+        {
+            $$ = new Expressao('DIVIDE', $1, $3);
+        }
+    | expressao "*" expressao
+        {
+            $$ = new Expressao('MULTIPLICA', $1, $3);
+        }
+    | expressao "%" expressao
+        {
+            $$ = new Expressao('RESTO', $1, $3);
+        }
+    | "+" termo
+        {
+            $$ = new Unario('POSITIVO', $2);
+        }
+    | "-" termo
+        {
+            $$ = new Unario('NEGATIVO', $2);
+        }
+    | "~" termo
+        {
+            $$ = new Unario('NAO-BINARIO', $2);
+        }
+    | NAO termo
+        {
+            $$ = new Unario('NAO-LOGICO', $2);
+        }
+    | termo
+        {
+            $$ = $1;
+        }
+    ;
+
+termo
+    : chamada_funcao
+        {
+            $$ = $1;
+        }
+    | variavel
+        {
+            $$ = $1;
+        }
+    | acesso_matriz,
+        {
+            $$ = $1;
+        }
+    | literal
+        {
+            $$ = $1;
+        }
+    | "(" expressao ")"
+        {
+            $$ = $2;
+        }
+    ;
+
+chamada_funcao
+    : IDENTIFICADOR "(" lista-argumentos ")"
+        {
+            $$ = {
+                op: 'CHAMADA-FUNCAO',
+                nome: $1,
+                argumentos: $3
+            }
+        }
+    ;
+lista-argumentos
+    : %empty
+        {
+            $$ = [];
+        }
+    | argumentos
+        {
+            $$ = $1;
+        }
+    ;
+
+argumentos
+    : expressao
+        {
+            $$ = [$1];
+        }
+    | argumentos ',' expressao
+        {
+            $$ = $1.concat($3);
+        }
+    ;
+
+literal
+    : STR_CONST
+        {
+            $$ = stringBuffer;
+        }
+    | inteiro_literal
+        {
+            $$ = $1;
+        }
+    | NUMERO_R
+        {
+            $$ = Number(yytext);
+        }
+    | C_CONST
+        {
+            $$ = stringBuffer;
+        }
+    | VERDADEIRO
+        {
+            $$ = true;
+        }
+    | FALSO
+        {
+            $$ = false;
+        }
+    ;
+
+declaracao_funcao
+    : FUNCAO variavel "(" lista_parametros_opcional ")" tipo_opcional declaracao_var_fun bloco_declaracao
+        {
+            $$ = {
+                nome: $2,
+                parametros: $4,
+                tipo: $6,
+                variaveis: $7,
+                corpo: $8
+            }
+        }
+    ;
+
+tipo_opcional
+    : ":" tipo_primitivo
+        {
+            $$ = $2;
+        }
+    | %empty
+        {
+            $$ = false;
+        }
+    ;
+
+lista_parametros_opcional
+    : lista_parametros
+        {
+            $$ = $1;
+        }
+    | %empty
+        {
+            $$ = false;
+        }
+    ;
+
+declaracao_var_fun
+    : declaracao_var_fun var_decl ';'
+        {
+            $$ = $1.concat([$2]);
+        }
+    | %empty
+        {
+            $$ = [];
+        }
+    ;
+
+lista_parametros
+    : parametro
+        {
+            $$ = [$1];
+        }
+    | lista_parametros ',' parametro
+        {
+            $$ = $1.concat([$3]);
+        }
+    ;
+
+parametro
+    : variavel ':' tipo_primitivo
+        {
+            $$ = {
+                nome: $1,
+                tipo: $3
+            }
+        }
+    | variavel ':' tipo_matriz
+        {
+            $$ = {
+                nome: $1,
+                tipo: $3
+            }
+        }
     ;
 
