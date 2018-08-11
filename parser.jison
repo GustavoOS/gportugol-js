@@ -257,9 +257,9 @@ algoritmo
     : declaracao_algoritmo var_decl_block bloco_declaracao fun_decl_list
     {
         $$ = {
-            algoritmo: $1,
+            nome: $1,
             variaveis: $2,
-            principal: $3,
+            corpo: $3,
             funcoes: $4
         }
     }
@@ -532,7 +532,7 @@ declaracao_se
             $$ = {
                 acao: 'SE',
                 condicao: $2,
-                entao: $4
+                corpo: $4
             }
         }
     | SE expressao ENTAO lista_declaracao SENAO lista_declaracao FIM-SE
@@ -540,7 +540,7 @@ declaracao_se
             $$ = {
                 acao: 'SE',
                 condicao: $2,
-                entao: $4,
+                corpo: $4,
                 senao: $6
             }
         }
@@ -552,7 +552,7 @@ declaracao_enquanto
             $$ = {
                 acao: 'ENQUANTO',
                 condicao: $2,
-                entao: $4
+                corpo: $4
             }
         }
     ;
@@ -566,7 +566,7 @@ declaracao_para
                 de: $4,
                 ate: $6,
                 passo: $7,
-                entao: $9
+                corpo: $9
             }
         }
     | PARA acesso_matriz DE expressao ATE expressao passo_mudanca FACA lista_declaracao FIM-PARA
@@ -577,7 +577,7 @@ declaracao_para
                 de: $4,
                 ate: $6,
                 passo: $7,
-                entao: $9
+                corpo: $9
             }
         }
     ;
@@ -771,32 +771,76 @@ literal
     ;
 
 declaracao_funcao
-    : FUNCAO IDENTIFICADOR "(" lista_parametros_opcional ")" tipo_opcional declaracao_var_fun bloco_declaracao
+    : FUNCAO variavel "(" lista_parametros_opcional ")" tipo_opcional declaracao_var_fun bloco_declaracao
+        {
+            $$ = {
+                nome: $2,
+                parametros: $4,
+                tipo: $6,
+                variaveis: $7,
+                corpo: $8
+            }
+        }
     ;
 
 tipo_opcional
     : ":" tipo_primitivo
+        {
+            $$ = $2;
+        }
     | %empty
+        {
+            $$ = false;
+        }
     ;
 
 lista_parametros_opcional
     : lista_parametros
+        {
+            $$ = $1;
+        }
     | %empty
+        {
+            $$ = false;
+        }
     ;
 
 declaracao_var_fun
-    : var_decl ';'
-    | declaracao var_decl ';'
+    : declaracao_var_fun var_decl ';'
+        {
+            $$ = $1.concat([$2]);
+        }
     | %empty
+        {
+            $$ = [];
+        }
     ;
 
 lista_parametros
     : parametro
+        {
+            $$ = [$1];
+        }
     | lista_parametros ',' parametro
+        {
+            $$ = $1.concat([$3]);
+        }
     ;
 
 parametro
-    : IDENTIFICADOR ':' tipo_primitivo
-    | IDENTIFICADOR ':' tipo_matriz
+    : variavel ':' tipo_primitivo
+        {
+            $$ = {
+                nome: $1,
+                tipo: $3
+            }
+        }
+    | variavel ':' tipo_matriz
+        {
+            $$ = {
+                nome: $1,
+                tipo: $3
+            }
+        }
     ;
 
