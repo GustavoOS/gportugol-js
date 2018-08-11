@@ -629,9 +629,21 @@ termo
             $$ = $1;
         }
     | variavel
-    | acesso_matriz
+        {
+            $$ = $1;
+        }
+    | acesso_matriz,
+        {
+            $$ = $1;
+        }
     | literal
+        {
+            $$ = $1;
+        }
     | "(" expressao ")"
+        {
+            $$ = $2;
+        }
     ;
 
 chamada_funcao
@@ -667,12 +679,30 @@ argumentos
     ;
 
 literal
-    : STR_CONST //use stringBuffer
+    : STR_CONST
+        {
+            $$ = stringBuffer;
+        }
     | inteiro_literal
+        {
+            $$ = $1;
+        }
     | NUMERO_R
-    | C_CONST //use stringBuffer
+        {
+            $$ = Number(yytext);
+        }
+    | C_CONST
+        {
+            $$ = stringBuffer;
+        }
     | VERDADEIRO
+        {
+            $$ = true;
+        }
     | FALSO
+        {
+            $$ = false;
+        }
     ;
 
 declaracao_funcao

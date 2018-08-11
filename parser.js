@@ -109,7 +109,7 @@ case 4: case 7: case 32:
             this.$ = $$[$0-1].concat([$$[$0]]);
         
 break;
-case 5: case 30: case 34:
+case 5: case 30: case 34: case 81:
 
             this.$ = $$[$0-1];
         
@@ -186,7 +186,7 @@ case 20: case 44:
             this.$ = $$[$0-3].concat($$[$0-1]);
         
 break;
-case 21:
+case 21: case 89:
 
             this.$ = Number(yytext);
         
@@ -237,7 +237,7 @@ case 33:
             this.$.acao = "ATRIBUIR";
         
 break;
-case 35: case 36: case 37: case 38: case 76: case 77: case 84:
+case 35: case 36: case 37: case 38: case 76: case 77: case 78: case 79: case 80: case 84: case 88:
 
             this.$ = $$[$0];
         
@@ -383,6 +383,21 @@ break;
 case 86:
 
             this.$ = $$[$0-2].concat($$[$0]);
+        
+break;
+case 87: case 90:
+
+            this.$ = stringBuffer;
+        
+break;
+case 91:
+
+            this.$ = true;
+        
+break;
+case 92:
+
+            this.$ = false;
         
 break;
 }
