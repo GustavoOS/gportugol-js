@@ -115,8 +115,7 @@ case 9:
 
         this.$ = {
             variaveis: $$[$0-3],
-            tipo: $$[$0-1],
-            classe: 'MATRIZ'
+            tipo: $$[$0-1]
         }
     
 break;
@@ -124,8 +123,7 @@ case 10:
 
             this.$ = {
                 variaveis: $$[$0-3],
-                tipo: $$[$0-1],
-                classe: 'PRIMITIVO'
+                tipo: $$[$0-1]
             }
         
 break;

@@ -292,16 +292,14 @@ var_decl
     {
         $$ = {
             variaveis: $1,
-            tipo: $3,
-            classe: 'MATRIZ'
+            tipo: $3
         }
     }
     | var-list ':' tipo_primitivo ';'
         {
             $$ = {
                 variaveis: $1,
-                tipo: $3,
-                classe: 'PRIMITIVO'
+                tipo: $3
             }
         }
     ;
