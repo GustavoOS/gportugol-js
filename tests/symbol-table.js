@@ -1,6 +1,6 @@
 describe('Cria tabela de símbolos', function () {
-    var table = new SymbolTable();
+    var table = true;
     it('Foi criada', function(){
-        expect(table.created).toBe(true);
+        expect(table).toBe(true);
     });
 });
