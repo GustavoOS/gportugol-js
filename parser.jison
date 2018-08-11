@@ -248,7 +248,7 @@ double_quote          ["]
 programa
     : algoritmo EOF
         {
-            console.log(util.inspect($1, {depth: null}));
+            console.log(util.inspect($1, {depth: null, compact: false, colors: true}));
             return $1;
         }
     ;
@@ -466,7 +466,18 @@ declaracao
 
 declaracao_retorno
     : RETORNE ';'
+        {
+            $$ = {
+                acao: 'RETORNE'
+            };
+        }
     | RETORNE expressao ';'
+        {
+            $$ = {
+                acao: 'RETORNE',
+                expressao: $2
+            }
+        }
     ;
 
 
@@ -517,23 +528,77 @@ declaracao_atribuicao
 
 declaracao_se
     : SE expressao ENTAO lista_declaracao FIM-SE
+        {
+            $$ = {
+                acao: 'SE',
+                condicao: $2,
+                entao: $4
+            }
+        }
     | SE expressao ENTAO lista_declaracao SENAO lista_declaracao FIM-SE
+        {
+            $$ = {
+                acao: 'SE',
+                condicao: $2,
+                entao: $4,
+                senao: $6
+            }
+        }
     ;
 
 declaracao_enquanto
     : ENQUANTO expressao FACA lista_declaracao FIM-ENQUANTO
+        {
+            $$ = {
+                acao: 'ENQUANTO',
+                condicao: $2,
+                entao: $4
+            }
+        }
     ;
 
 declaracao_para
-    : PARA variavel DE expressao ATE expressao FACA lista_declaracao FIM-PARA
-    | PARA acesso_matriz DE expressao ATE expressao FACA lista_declaracao FIM-PARA
+    : PARA variavel DE expressao ATE expressao passo_mudanca FACA lista_declaracao FIM-PARA
+        {
+            $$ = {
+                acao: 'PARA',
+                variavel: $2,
+                de: $4,
+                ate: $6,
+                passo: $7,
+                entao: $9
+            }
+        }
+    | PARA acesso_matriz DE expressao ATE expressao passo_mudanca FACA lista_declaracao FIM-PARA
+        {
+            $$ = {
+                acao: 'PARA',
+                variavel: $2,
+                de: $4,
+                ate: $6,
+                passo: $7,
+                entao: $9
+            }
+        }
     ;
     
 passo_mudanca
     : %empty
+        {
+            $$ = {}
+        }
     | PASSO inteiro_literal
+        {
+            $$ = new Unario('SOMA', $2);
+        }
     | PASSO '+' inteiro_literal
+        {
+            $$ = new Unario('SOMA', $2);
+        }
     | PASSO '-' inteiro_literal
+        {
+            $$ = new Unario('SUBTRAI', $2);
+        }
     ;
 
 expressao
