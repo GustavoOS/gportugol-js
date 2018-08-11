@@ -1,0 +1,29 @@
+{
+  "name": "gportugol-js",
+  "version": "1.0.0",
+  "description": "G-Portugol compiler",
+  "main": "gportugol.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/GustavoOS/gportugol-js.git"
+  },
+  "keywords": [
+    "portugol",
+    "gportugol",
+    "g-portugol",
+    "compiler",
+    "transpilator"
+  ],
+  "author": "Gustavo Oliveira de Souza",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/GustavoOS/gportugol-js/issues"
+  },
+  "homepage": "https://github.com/GustavoOS/gportugol-js#readme"
+}
