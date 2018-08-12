@@ -1,6 +1,7 @@
-function SymbolTable() {
+function SymbolTable(algoritmo = "algoritmo") {
     this.scopes = {};
-    this.declareVariable = function (name, scope = "algoritmo", location = 0, type = "INTEIRO") {
+    this.algoritmo = algoritmo;
+    this.declareVariable = function (name, scope = this.algoritmo, location = 0, type = "INTEIRO") {
         if (this.scopes[scope][name] !== undefined) return false;
         this.scopes[scope][name] = new SymbolEntry(
             location,
@@ -8,7 +9,7 @@ function SymbolTable() {
             ++this.scopes[scope].variableCount);
         return true;
     };
-    this.declareScope = function (name = "algoritmo") {
+    this.declareScope = function (name = this.algoritmo) {
         this.scopes[name] = {
             variableCount: 0
         };
@@ -48,6 +49,15 @@ describe('Cria tabela de símbolos', function () {
         for (var scope in table.scopes) {
             expect(table.scopes[scope].variableCount).toBe(0);
         }
+    });
+
+    it("Verifica o nome do algoritmo", () =>{
+        expect(table.algoritmo).toBe("algoritmo");
+    });
+
+    it("Verifica algoritmo com outro nome", () => {
+        table = new SymbolTable("fatorial");
+        expect(table.algoritmo).toBe("fatorial");
     });
 });
 
