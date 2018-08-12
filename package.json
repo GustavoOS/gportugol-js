@@ -20,7 +20,7 @@
     "compiler",
     "transpilator"
   ],
-  "author": "Gustavo Oliveira de Souza",
+  "author": "Gustavo Oliveira de Souza <gustavo.oliveira.souza@outlook.com>",
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/GustavoOS/gportugol-js/issues"
