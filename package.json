@@ -7,13 +7,17 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jasmine-node tests/*spec.js"
   },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/GustavoOS/gportugol-js.git"
   },
   "keywords": [
+    "portugol-js",
+    "g-portugol-js",
+    "portugoljs",
+    "gportugoljs",
     "portugol",
     "gportugol",
     "g-portugol",
@@ -30,9 +34,7 @@
   "devDependencies": {
     "jasmine": "^3.2.0",
     "jasmine-core": "^3.2.0",
-    "jison": "^0.4.18",
-    "karma": "^3.0.0",
-    "karma-firefox-launcher": "^1.1.0",
-    "karma-jasmine": "^1.1.2"
+    "jasmine-node": "^1.15.0",
+    "jison": "^0.4.18"
   }
 }
