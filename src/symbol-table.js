@@ -1,52 +1,15 @@
 function SymbolTable() {
     this.scopes = {};
-    this.addSymbol = function (name, scope = "algoritmo", location = 0) {
-        var newSymbol = new SymbolEntry(name, scope, location);
-        if (this.scopes[scope]) {
-            var foundSymbolIndex = this.findIndex(name, scope);
-            if (foundSymbolIndex >= 0) {
-                this.scopes[scope][foundSymbolIndex].addLocation(location);
-            } else {
-                this.scopes[scope].push(newSymbol);
-            }
-        } else {
-            this.scopes[scope] = [newSymbol];
+    this.declareVariable = function (name, scope = "algoritmo", location = 0) {
+        if (this.scopes[scope] === undefined) {
+            this.scopes[scope] = {};
         }
+        if (this.scopes[scope][name] !== undefined) return false;
+        this.scopes[scope][name] = [location];
+        return true;
     };
-    this.find = function (name, scope = "algoritmo") {
-        if (this.scopes[scope]) {
-            return this.scopes[scope].find((rs) => {
-                return rs.name === name;
-            });
-        }
-        return;
-    };
-    this.findIndex = function (name, scope = "algoritmo") {
-        if (this.scopes[scope]) {
-            return this.scopes[scope].findIndex((rs) => {
-                return rs.name === name;
-            });
-        }
-        return -1;
-    };
-
 }
 
-function SymbolEntry(name, scope = "algoritmo", location = 0) {
-    this.name = name;
-    this.scope = scope;
-    this.location = [location];
-
-    this.addLocation = function (local = 1) {
-        this.location.push(1);
-    };
-
-    this.unsetFunctions = function () {
-        this.addLocation = undefined;
-        this.unsetFunctions = undefined;
-        return this;
-    };
-}
 
 // Testes
 function Teste() {
@@ -57,12 +20,7 @@ function Teste() {
     return mass;
 }
 
-function unsetFunctionsFromArrayOfEntries(arrayOfEntries) {
-    arrayOfEntries.forEach(
-        (el) => el.unsetFunctions()
-    );
-    return arrayOfEntries;
-}
+
 describe('Cria tabela de símbolos', function () {
     var table;
 
@@ -84,40 +42,46 @@ describe('Inserção de símbolos', function () {
     var nameList = [];
 
     beforeAll(function () {
+        table = new SymbolTable();
         nameList = Teste().names;
     });
 
     beforeEach(function () {
-        table = new SymbolTable();
-        table.addSymbol("Joao");
+        table.declareVariable("Joao");
     });
 
     it('Verifica se inserção funcionou', function () {
-        expect(table.find("Joao")).toBeDefined();
+        expect(table.scopes.algoritmo.Joao).toBeDefined();
     });
 
     it('Verifica múltiplas inserções', function () {
-        var expectedArray = [new SymbolEntry("Joao")];
+        var allVariables = ["Joao"].concat(nameList);
         nameList.forEach(element => {
-            expectedArray.push(new SymbolEntry(element));
-            table.addSymbol(element);
+            table.declareVariable(element);
         });
-        expect(unsetFunctionsFromArrayOfEntries(table.scopes.algoritmo)).toEqual(
-            unsetFunctionsFromArrayOfEntries(expectedArray));
+        allVariables.forEach((variable) => {
+            expect(table.scopes.algoritmo[variable]).toBeDefined();
+        });
     });
 
     it('Verifica se inserção não colide', function () {
-        table.addSymbol("Joao");
-        expect(table.find("Joao").location.length).toBe(2);
-        expect(table.scopes.algoritmo.length).toBe(1);
+        var gotDeclared = table.declareVariable("Joao");
+        expect(gotDeclared).toBeFalsy();
     });
 
     it("Inserção em dois escopos e mesmo nome", function () {
-        table.addSymbol("Joao", Teste().scopes[1]);
-        expect(unsetFunctionsFromArrayOfEntries(
-            table.scopes[Teste().scopes[1]])).toEqual(
-            [(new SymbolEntry(
-                "Joao", Teste().scopes[1])).unsetFunctions()]);
-        expect(table.scopes.algoritmo.length).toBe(1);
+        table.declareVariable("Joao", Teste().scopes[1]);
+        expect(table.scopes.algoritmo.Joao).toBeDefined();
+        expect(table.scopes[Teste().scopes[1]].Joao).toBeDefined();
+    });
+
+    it("Inserção em vários escopos", () => {
+        table.scopes = {};
+        nameList.forEach((element, index) => {
+            table.declareVariable(element, Teste().scopes[index]);
+        });
+        nameList.forEach((element, index) => {
+            expect(table.scopes[Teste().scopes[index]][element]);
+        });
     });
 });
