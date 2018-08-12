@@ -81,7 +81,7 @@ describe('Inserção de símbolos', function () {
             table.declareVariable(element, Teste().scopes[index]);
         });
         nameList.forEach((element, index) => {
-            expect(table.scopes[Teste().scopes[index]][element]);
+            expect(table.scopes[Teste().scopes[index]][element]).toBeDefined();
         });
     });
 });
