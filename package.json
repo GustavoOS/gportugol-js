@@ -25,7 +25,7 @@
     "transpilator"
   ],
   "author": "Gustavo Oliveira de Souza <gustavo.oliveira.souza@outlook.com>",
-  "license": "LGPL 2.1'",
+  "license": "LGPL-2.1-only'",
   "bugs": {
     "url": "https://github.com/GustavoOS/gportugol-js/issues"
   },
