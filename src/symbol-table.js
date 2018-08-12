@@ -15,6 +15,33 @@ function SymbolTable(algoritmo = "algoritmo") {
             type: type
         };
     };
+
+    this.find = function (name, scope = this.algoritmo) {
+        return this.scopes[scope][name];
+    };
+
+    this.getScope = function (scope = this.algoritmo) {
+        return {
+            variableCount: this.scopes[scope].variableCount,
+            type: this.scopes[scope].type
+        };
+    }
+
+    this.refer = function (name, location, scope = this.algoritmo) {
+        var result = this.find(name, scope);
+        if (result) {
+            this.scopes[scope][name].location.push(location);
+            return true;
+        } else {
+            result = this.find(name);
+            if (result) {
+                this.scopes[this.algoritmo][name].location.push(location);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
 }
 
 function SymbolEntry(location, type, id) {
@@ -27,7 +54,10 @@ function SymbolEntry(location, type, id) {
 // Testes
 function Teste() {
     var mass = {
-        names: ['Gilberto', 'Adenor', 'Damares', 'Rubi'],
+        names: {
+            list: ['Gilberto', 'Adenor', 'Damares', 'Rubi'],
+            types: ["INTEIRO", "LOGICO", "LITERAL", "REAL"]
+        },
         scopes: {
             list: ['algoritmo', 'sort', 'order', 'grow'],
             types: [undefined, "REAL", "LOGICO", "CARACTERE"]
@@ -90,7 +120,7 @@ describe('Inserção de símbolos', function () {
     beforeEach(function () {
         table = new SymbolTable();
         scopeList = Teste().scopes.list;
-        nameList = Teste().names;
+        nameList = Teste().names.list;
         scopeList.forEach((el) => table.declareScope(el));
     });
 
@@ -143,6 +173,39 @@ describe('Inserção de símbolos', function () {
             expect(table.scopes[scopeList[index]][element]).toEqual(
                 new SymbolEntry(0, "INTEIRO", 1)
             );
+        });
+    });
+});
+
+describe("Referência e busca:", () => {
+    var table;
+    beforeEach(() => {
+        table = new SymbolTable();
+        Teste().scopes.list.forEach((el, i) => {
+            table.declareScope(el, Teste().scopes.types[i]);
+        });
+        Teste().names.list.forEach((el, i) => {
+            table.declareVariable(el, "sort", i + 1, Teste().scopes.types[i]);
+        });
+    });
+
+    it("Referência", () => {
+        expect(table.refer("Adenor", 45, "sort")).toBeTruthy();
+        expect(table.scopes.sort.Adenor.location).toEqual([2, 45]);
+    });
+
+    it("Referenciar não declarado", () => {
+        expect(table.refer("Manoel", 23)).toBeFalsy();
+    });
+
+    it("Busca", () => {
+        expect(table.find("Adenor", "sort")).toEqual(table.scopes.sort.Adenor);
+    });
+
+    it("Busca escopo", () => {
+        expect(table.getScope("sort")).toEqual({
+            variableCount: 4,
+            type: "REAL"
         });
     });
 });
