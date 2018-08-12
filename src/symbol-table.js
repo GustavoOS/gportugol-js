@@ -10,10 +10,7 @@ function SymbolTable(algoritmo = "algoritmo") {
         return true;
     };
     this.declareScope = function (name = this.algoritmo, type = undefined) {
-        this.scopes[name] = {
-            variableCount: 0,
-            type: type
-        };
+        this.scopes[name] = new Scope(type);
     };
 
     this.find = function (name, scope = this.algoritmo) {
@@ -21,10 +18,7 @@ function SymbolTable(algoritmo = "algoritmo") {
     };
 
     this.getScope = function (scope = this.algoritmo) {
-        return {
-            variableCount: this.scopes[scope].variableCount,
-            type: this.scopes[scope].type
-        };
+        return new Scope(this.scopes[scope].type, this.scopes[scope].variableCount);
     }
 
     this.refer = function (name, location, scope = this.algoritmo) {
@@ -48,6 +42,11 @@ function SymbolEntry(location, type, id) {
     this.location = [location];
     this.type = type;
     this.id = id;
+}
+
+function Scope(type = undefined, variableCount = 0){
+    this.variableCount = variableCount;
+    this.type = type;
 }
 
 
@@ -203,9 +202,6 @@ describe("Referência e busca:", () => {
     });
 
     it("Busca escopo", () => {
-        expect(table.getScope("sort")).toEqual({
-            variableCount: 4,
-            type: "REAL"
-        });
+        expect(table.getScope("sort")).toEqual(new Scope("REAL", 4));
     });
 });
