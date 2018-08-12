@@ -9,9 +9,10 @@ function SymbolTable(algoritmo = "algoritmo") {
             ++this.scopes[scope].variableCount);
         return true;
     };
-    this.declareScope = function (name = this.algoritmo) {
+    this.declareScope = function (name = this.algoritmo, type = undefined) {
         this.scopes[name] = {
-            variableCount: 0
+            variableCount: 0,
+            type: type
         };
     };
 }
@@ -27,7 +28,10 @@ function SymbolEntry(location, type, id) {
 function Teste() {
     var mass = {
         names: ['Gilberto', 'Adenor', 'Damares', 'Rubi'],
-        scopes: ['algoritmo', 'sort', 'order', 'grow']
+        scopes: {
+            list: ['algoritmo', 'sort', 'order', 'grow'],
+            types: [undefined, "REAL", "LOGICO", "CARACTERE"]
+        }
     };
     return mass;
 }
@@ -38,7 +42,6 @@ describe('Cria tabela de símbolos', function () {
 
     beforeEach(function () {
         table = new SymbolTable();
-        Teste().scopes.forEach((el) => table.declareScope(el));
     });
 
     it('Foi criada', function () {
@@ -46,18 +49,34 @@ describe('Cria tabela de símbolos', function () {
     });
 
     it('Verifica se os escopos estão vazios', function () {
+        Teste().scopes.list.forEach((el) => table.declareScope(el));
         for (var scope in table.scopes) {
             expect(table.scopes[scope].variableCount).toBe(0);
         }
     });
 
-    it("Verifica o nome do algoritmo", () =>{
+    it("Verifica o nome do algoritmo", () => {
         expect(table.algoritmo).toBe("algoritmo");
     });
 
     it("Verifica algoritmo com outro nome", () => {
         table = new SymbolTable("fatorial");
         expect(table.algoritmo).toBe("fatorial");
+    });
+
+    it("Declara escopos com tipos diferentes", () => {
+        var scopes = Teste().scopes;
+        var scopeCount = 0;
+        scopes.list.forEach((s, index) => {
+            table.declareScope(s, scopes.types[index]);
+        });
+        for (var s in table.scopes) {
+            scopeCount++;
+            expect(table.scopes[s].variableCount).toBe(0);
+            var index = scopes.list.findIndex((el) => el === s);
+            expect(table.scopes[s].type).toBe(scopes.types[index]);
+        }
+        expect(scopeCount).toBe(scopes.list.length);
     });
 });
 
@@ -70,7 +89,7 @@ describe('Inserção de símbolos', function () {
 
     beforeEach(function () {
         table = new SymbolTable();
-        scopeList = Teste().scopes;
+        scopeList = Teste().scopes.list;
         nameList = Teste().names;
         scopeList.forEach((el) => table.declareScope(el));
     });
