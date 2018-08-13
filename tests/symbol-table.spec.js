@@ -60,6 +60,7 @@ describe('Cria tabela de símbolos', function () {
         }
         expect(scopeCount).toBe(scopes.list.length);
     });
+
 });
 
 describe('Inserção de símbolos', function () {
@@ -79,6 +80,11 @@ describe('Inserção de símbolos', function () {
     it('Verifica se inserção funcionou', function () {
         table.declareVariable("Joao");
         expect(table.scopes.algoritmo.Joao).toEqual(new SymbolEntry(0, "INTEIRO", 1));
+    });
+
+    it("Verifica a inserção de matrizes", function(){
+        table.declareVariable("mat", "algoritmo", 12, "INTEIROS", [2, 3, 5]);
+        expect(table.scopes.algoritmo.mat).toEqual(new SymbolEntry(12, "INTEIROS", 1, [2, 3, 5]));
     });
 
     it("Declara variáveis de tipos diferentes num mesmo escopo", () => {
