@@ -85,7 +85,7 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
 
-            console.log(util.inspect($$[$0-1], {depth: null, compact: false, colors: true}));
+            //console.log(util.inspect($$[$0-1], {depth: null, compact: false, colors: true}));
             return $$[$0-1];
         
 break;
@@ -650,7 +650,7 @@ parse: function parse(input) {
     return true;
 }};
 
-    var util = require('util');
+    //var util = require('util');
     var stringBuffer;
     function output_error(message){
         //console.log(message);

@@ -1,5 +1,5 @@
 %{
-    var util = require('util');
+    //var util = require('util');
     var stringBuffer;
     function output_error(message){
         //console.log(message);
@@ -248,7 +248,7 @@ double_quote          ["]
 programa
     : algoritmo EOF
         {
-            console.log(util.inspect($1, {depth: null, compact: false, colors: true}));
+            //console.log(util.inspect($1, {depth: null, compact: false, colors: true}));
             return $1;
         }
     ;

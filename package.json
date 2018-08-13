@@ -2,7 +2,7 @@
   "name": "gportugol-js",
   "version": "1.0.0",
   "description": "G-Portugol compiler",
-  "main": "gportugol.js",
+  "main": "src/gportugol.js",
   "directories": {
     "test": "tests"
   },
@@ -34,7 +34,6 @@
   "devDependencies": {
     "jasmine": "^3.2.0",
     "jasmine-core": "^3.2.0",
-    "jasmine-node": "^1.15.0",
-    "jison": "^0.4.18"
+    "jasmine-node": "^1.15.0"
   }
 }
