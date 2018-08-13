@@ -80,6 +80,7 @@ describe('Inserção de símbolos', function () {
     it('Verifica se inserção funcionou', function () {
         table.declareVariable("Joao");
         expect(table.scopes.algoritmo.Joao).toEqual(new SymbolEntry(0, "INTEIRO", 1));
+        expect(table.scopes.algoritmo.Joao.dimensions).toBeUndefined();
     });
 
     it("Verifica a inserção de matrizes", function(){
