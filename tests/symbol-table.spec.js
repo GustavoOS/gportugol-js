@@ -86,6 +86,7 @@ describe('Inserção de símbolos', function () {
     it("Verifica a inserção de matrizes", function(){
         table.declareVariable("mat", "algoritmo", 12, "INTEIROS", [2, 3, 5]);
         expect(table.scopes.algoritmo.mat).toEqual(new SymbolEntry(12, "INTEIROS", 1, [2, 3, 5]));
+        expect(table.scopes.algoritmo.mat.dimensions).toEqual([2, 3, 5]);
     });
 
     it("Declara variáveis de tipos diferentes num mesmo escopo", () => {
