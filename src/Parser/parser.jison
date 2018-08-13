@@ -1,19 +1,16 @@
 %{
     //var util = require('util');
+    var data-structure = require('./data-structure');
+    var Expressao = data-structure.Expressao;
+    var Unario = data-structure.Unario;
+
+
     var stringBuffer;
     function output_error(message){
         //console.log(message);
     }
 
-    function Expressao(op, esquerda, direita){
-        this.op = op;
-        this.esquerda = esquerda;
-        this.direita = direita;
-    }
-    function Unario(op, direita){
-        this.op = op;
-        this.direita = direita;
-    }
+    
 %}
 
 /* lexical grammar */
