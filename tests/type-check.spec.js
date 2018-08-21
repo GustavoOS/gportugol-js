@@ -92,4 +92,16 @@ describe("Verifica tipos: ", function () {
     it("Verifica criação da tabela de símbolos", function(){
         expect(type.SymbolTable).toBeDefined();
     });
+
+    it("Todos os escopos estão na tabela de símbolos", function(){
+        type.createScopesAndDeclareVariables();
+        expect(type.SymbolTable.scopes.fatorial_recursivo).toBeDefined();
+        expect(type.SymbolTable.scopes.fatorial).toBeDefined();
+    });
+
+    it("Variáveis em funções e fora de função possuem entradas", function(){
+        type.createScopesAndDeclareVariables();
+        expect(type.SymbolTable.scopes.fatorial_recursivo.x.id).toEqual(1);
+        expect(type.SymbolTable.scopes.fatorial.z.id).toEqual(1);
+    });
 });
