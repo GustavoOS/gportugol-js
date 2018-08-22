@@ -11,8 +11,7 @@ const tree = {
         variaveis: ['x'],
         tipo: 'INTEIRO'
     }],
-    corpo: [
-        {
+    corpo: [{
             op: 'CHAMADA-FUNCAO',
             nome: 'imprima',
             argumentos: ['Digite um número:']
@@ -89,17 +88,17 @@ describe("Verifica tipos: ", function () {
         expect(type.ast).toEqual(tree);
     });
 
-    it("Verifica criação da tabela de símbolos", function(){
+    it("Verifica criação da tabela de símbolos", function () {
         expect(type.SymbolTable).toBeDefined();
     });
 
-    it("Todos os escopos estão na tabela de símbolos", function(){
+    it("Todos os escopos estão na tabela de símbolos", function () {
         type.createScopesAndDeclareVariables();
         expect(type.SymbolTable.scopes.fatorial_recursivo).toBeDefined();
         expect(type.SymbolTable.scopes.fatorial).toBeDefined();
     });
 
-    it("Variáveis em funções e fora de função possuem entradas", function(){
+    it("Variáveis em funções e fora de função possuem entradas", function () {
         type.createScopesAndDeclareVariables();
         expect(type.SymbolTable.scopes.fatorial_recursivo.x.id).toEqual(1);
         expect(type.SymbolTable.scopes.fatorial.z.id).toEqual(1);
