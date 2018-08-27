@@ -1,8 +1,9 @@
 %{
-    //var util = require('util');
-    var data-structure = require('./data-structure');
-    var Expressao = data-structure.Expressao;
-    var Unario = data-structure.Unario;
+    // var util = require('util');
+    var data_structure = require('./data-structure.js');
+    var Expressao = data_structure.Expressao;
+    var Unario = data_structure.Unario;
+    const Tipos = data_structure.Tipos;
 
 
     var stringBuffer;
@@ -245,7 +246,7 @@ double_quote          ["]
 programa
     : algoritmo EOF
         {
-            //console.log(util.inspect($1, {depth: null, compact: false, colors: true}));
+            // console.log(util.inspect($1, {depth: null, compact: false, colors: true}));
             return $1;
         }
     ;
@@ -282,13 +283,13 @@ declaracao_algoritmo
     ;
 
 var_decl_block
-    : VARIAVEIS var-decl-list FIM-VARIAVEIS
+    : VARIAVEIS var_decl_list FIM-VARIAVEIS
     {$$ = $2}
     ;
 
 
-var-decl-list
-    : var-decl-list var_decl
+var_decl_list
+    : var_decl_list var_decl
         {
             $$ = $1.concat([$2]);
         }
@@ -303,7 +304,8 @@ var_decl
     {
         $$ = {
             variaveis: $1,
-            tipo: $3
+            tipo: $3.tipo,
+            dimensoes: $3.dimensoes
         }
     }
     | var-list ':' tipo_primitivo ';'
@@ -330,23 +332,23 @@ var-list
 tipo_primitivo
     : INTEIRO
         {
-            $$ = 'INTEIRO';
+            $$ = Tipos[0];
         }
     | REAL
         {
-            $$ = 'REAL';
+            $$ = Tipos[1];
         }
     | CARACTERE
         {
-            $$ = 'CARACTERE';
+            $$ = Tipos[2];
         }
     | LITERAL
         {
-            $$ = 'LITERAL';
+            $$ = Tipos[3];
         }
     | LOGICO
         {
-            $$ = 'LOGICO';
+            $$ = Tipos[4];
         }
     ;
 
@@ -394,23 +396,23 @@ inteiro_literal
 tipo_primitivo-plural
     : INTEIROS
         {
-            $$ = 'INTEIROS';
+            $$ = Tipos[0];
         }
     | REAIS
         {
-            $$ = 'REAIS';
+            $$ = Tipos[1];
         }
     | CARACTERES
         {
-            $$ = 'CARACTERES';
+            $$ = Tipos[2];
         }
     | LITERAIS
         {
-            $$ = 'LITERAIS';
+            $$ = Tipos[3];
         }
     | LOGICOS
         {
-            $$ = 'LOGICOS';
+            $$ = Tipos[4];
         }
     ;
 
@@ -768,7 +770,7 @@ literal
     ;
 
 declaracao_funcao
-    : FUNCAO variavel "(" lista_parametros_opcional ")" tipo_opcional declaracao_var_fun bloco_declaracao
+    : FUNCAO variavel "(" lista_parametros_opcional ")" tipo_opcional var_decl_list bloco_declaracao
         {
             $$ = {
                 nome: $2,
@@ -802,16 +804,6 @@ lista_parametros_opcional
         }
     ;
 
-declaracao_var_fun
-    : declaracao_var_fun var_decl ';'
-        {
-            $$ = $1.concat([$2]);
-        }
-    | %empty
-        {
-            $$ = [];
-        }
-    ;
 
 lista_parametros
     : parametro

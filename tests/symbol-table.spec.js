@@ -95,25 +95,25 @@ describe('Inserção de símbolos', function () {
 
     it('Verifica se inserção funcionou', function () {
         table.declareVariable("Joao");
-        expect(table.scopes.algoritmo.Joao).toEqual(new SymbolEntry(0, "INTEIRO", 1));
+        expect(table.scopes.algoritmo.Joao).toEqual(new SymbolEntry(1));
         expect(table.scopes.algoritmo.Joao.dimensions).toBeUndefined();
     });
 
     it("Verifica a inserção de matrizes", function () {
-        table.declareVariable("mat", "algoritmo", 12, "INTEIROS", [2, 3, 5]);
-        expect(table.scopes.algoritmo.mat).toEqual(new SymbolEntry(12, "INTEIROS", 1, [2, 3, 5]));
+        table.declareVariable("mat", "algoritmo", "INTEIRO", [2, 3, 5], 12);
+        expect(table.scopes.algoritmo.mat).toEqual(new SymbolEntry(1, "INTEIRO", [2, 3, 5], 12));
         expect(table.scopes.algoritmo.mat.dimensions).toEqual([2, 3, 5]);
     });
 
     it("Declara variáveis de tipos diferentes num mesmo escopo", () => {
         table.declareScope("empilha");
-        table.declareVariable("stack", "empilha", 23, "CARACTERE");
-        table.declareVariable("item", "empilha", 25, "REAL");
+        table.declareVariable("stack", "empilha", "CARACTERE");
+        table.declareVariable("item", "empilha", "REAL");
         expect(table.scopes.empilha.stack).toEqual(
-            new SymbolEntry(23, "CARACTERE", 1)
+            new SymbolEntry(1, "CARACTERE")
         );
         expect(table.scopes.empilha.item).toEqual(
-            new SymbolEntry(25, "REAL", 2)
+            new SymbolEntry(2, "REAL")
         );
     });
 
@@ -123,7 +123,7 @@ describe('Inserção de símbolos', function () {
         });
         nameList.forEach((variable, index) => {
             expect(table.scopes.algoritmo[variable]).toEqual(
-                new SymbolEntry(0, "INTEIRO", index + 1)
+                new SymbolEntry(index +1)
             );
         });
     });
@@ -147,7 +147,7 @@ describe('Inserção de símbolos', function () {
         });
         nameList.forEach((element, index) => {
             expect(table.scopes[scopeList[index]][element]).toEqual(
-                new SymbolEntry(0, "INTEIRO", 1)
+                new SymbolEntry(1)
             );
         });
     });
@@ -167,7 +167,7 @@ describe("Referência e busca:", () => {
 
     it("Referência", () => {
         expect(table.refer("Adenor", 45, "sort")).toBeTruthy();
-        expect(table.scopes.sort.Adenor.location).toEqual([2, 45]);
+        expect(table.scopes.sort.Adenor.location).toEqual([undefined, 45]);
     });
 
     it("Referenciar não declarado", () => {

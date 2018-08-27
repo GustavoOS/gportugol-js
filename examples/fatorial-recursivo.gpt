@@ -8,6 +8,7 @@ início
     imprima("fatorial de ",x," é igual a ",fatorial(x));
 fim
 função fatorial(z:inteiro) : inteiro
+    m1: matriz[2][4] de inteiros;
 início
     se z = 1 então
         retorne 1;

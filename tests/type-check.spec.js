@@ -1,8 +1,4 @@
 var TypeCheck = require("../src/type-check").TypeCheck;
-var st = require('../src/symbol-table');
-var SymbolTable = st.SymbolTable;
-var SymbolEntry = st.SymbolEntry;
-var Scope = st.Scope;
 
 
 const tree = {
@@ -46,7 +42,11 @@ const tree = {
             tipo: 'INTEIRO'
         }],
         tipo: 'INTEIRO',
-        variaveis: [],
+        variaveis: [{
+            variaveis: ['m1'],
+            tipo: 'INTEIRO',
+            dimensoes: [2, 4]
+        }],
         corpo: [{
             acao: 'SE',
             condicao: {
@@ -102,5 +102,10 @@ describe("Verifica tipos: ", function () {
         type.createScopesAndDeclareVariables();
         expect(type.SymbolTable.scopes.fatorial_recursivo.x.id).toEqual(1);
         expect(type.SymbolTable.scopes.fatorial.z.id).toEqual(1);
+    });
+
+    it("Matrizes estão armazenadas na tabela de símbolos", function () {
+        type.createScopesAndDeclareVariables();
+        expect(type.SymbolTable.scopes.fatorial.m1.dimensions).toEqual([2, 4]);
     });
 });

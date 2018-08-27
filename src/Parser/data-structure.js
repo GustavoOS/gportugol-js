@@ -11,3 +11,5 @@ function Unario(op, direita) {
     this.op = op;
     this.direita = direita;
 }
+
+module.exports.Tipos = ['INTEIRO', 'REAL', 'CARACTERE', 'LITERAL', 'LOGICO'];

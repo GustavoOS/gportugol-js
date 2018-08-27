@@ -5,13 +5,13 @@ module.exports.Scope = Scope;
 function SymbolTable(algoritmo = "algoritmo") {
     this.scopes = {};
     this.algoritmo = algoritmo;
-    this.declareVariable = function (name, scope = this.algoritmo, location = 0, type = "INTEIRO", dimensions = undefined) {
+    this.declareVariable = function (name, scope = this.algoritmo, type = undefined, dimensions = undefined, location = undefined) {
         if (this.scopes[scope][name] !== undefined) return false;
         this.scopes[scope][name] = new SymbolEntry(
-            location,
-            type,
             ++this.scopes[scope].variableCount,
-            dimensions
+            type,
+            dimensions,
+            location
         );
         return true;
     };
@@ -44,7 +44,7 @@ function SymbolTable(algoritmo = "algoritmo") {
     };
 }
 
-function SymbolEntry(location, type, id, dimensions = undefined) {
+function SymbolEntry(id, type=undefined, dimensions = undefined, location = undefined) {
     this.location = [location];
     this.type = type;
     this.id = id;
