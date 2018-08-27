@@ -16,10 +16,16 @@ function TypeCheck(ast) {
             this.declareVariables(funcao.variaveis, funcao.nome);
         });
     };
+
     this.declareVariables = function (variables = this.ast.variaveis, scope = this.ast.nome) {
         variables.forEach(variableDeclaration => {
             variableDeclaration.variaveis.forEach((variable) => {
-                this.SymbolTable.declareVariable(variable, scope, variableDeclaration.tipo, variableDeclaration.dimensoes, variableDeclaration.local);
+                this.SymbolTable.declareVariable(
+                    variable,
+                    scope,
+                    variableDeclaration.tipo,
+                    variableDeclaration.dimensoes,
+                    variableDeclaration.local);
             });
         });
     };
