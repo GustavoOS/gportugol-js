@@ -258,7 +258,8 @@ algoritmo
             nome: $1,
             variaveis: $2,
             corpo: $3,
-            funcoes: $4
+            funcoes: $4,
+            local: @$
         }
     }
     ;
@@ -305,14 +306,16 @@ var_decl
         $$ = {
             variaveis: $1,
             tipo: $3.tipo,
-            dimensoes: $3.dimensoes
+            dimensoes: $3.dimensoes,
+            local: @$
         }
     }
     | var-list ':' tipo_primitivo ';'
         {
             $$ = {
                 variaveis: $1,
-                tipo: $3
+                tipo: $3,
+                local:@$
             }
         }
     ;
@@ -357,7 +360,8 @@ tipo_matriz
         {
             $$ = {
                 dimensoes: $2,
-                tipo: $4
+                tipo: $4,
+                local: @$
             }
         }
     ;
@@ -467,14 +471,16 @@ declaracao_retorno
     : RETORNE ';'
         {
             $$ = {
-                acao: 'RETORNE'
+                acao: 'RETORNE',
+                local: @$
             };
         }
     | RETORNE expressao ';'
         {
             $$ = {
                 acao: 'RETORNE',
-                expressao: $2
+                expressao: $2,
+                local: @$
             }
         }
     ;
@@ -492,7 +498,8 @@ acesso_matriz
         {
             $$ = {
                 valor: $1,
-                indices: $2
+                indices: $2,
+                local: @$
             }
         }
     ;
@@ -513,14 +520,16 @@ declaracao_atribuicao
         {   
             $$ = {
                 esquerda: $1,
-                direita: $3
+                direita: $3,
+                local: @$
             }
         }
     | acesso_matriz ATRIBUI expressao ';'
         {
             $$ = {
                 esquerda: $1,
-                direita: $3
+                direita: $3,
+                local: @$
             }
         }
     ;
@@ -531,7 +540,8 @@ declaracao_se
             $$ = {
                 acao: 'SE',
                 condicao: $2,
-                corpo: $4
+                corpo: $4,
+                local: @$
             }
         }
     | SE expressao ENTAO lista_declaracao SENAO lista_declaracao FIM-SE
@@ -540,7 +550,8 @@ declaracao_se
                 acao: 'SE',
                 condicao: $2,
                 corpo: $4,
-                senao: $6
+                senao: $6,
+                local: @$
             }
         }
     ;
@@ -551,7 +562,8 @@ declaracao_enquanto
             $$ = {
                 acao: 'ENQUANTO',
                 condicao: $2,
-                corpo: $4
+                corpo: $4,
+                local: @$
             }
         }
     ;
@@ -565,7 +577,8 @@ declaracao_para
                 de: $4,
                 ate: $6,
                 passo: $7,
-                corpo: $9
+                corpo: $9,
+                local: @$
             }
         }
     | PARA acesso_matriz DE expressao ATE expressao passo_mudanca FACA lista_declaracao FIM-PARA
@@ -576,7 +589,8 @@ declaracao_para
                 de: $4,
                 ate: $6,
                 passo: $7,
-                corpo: $9
+                corpo: $9,
+                local: @$
             }
         }
     ;
@@ -588,98 +602,98 @@ passo_mudanca
         }
     | PASSO inteiro_literal
         {
-            $$ = new Unario('SOMA', $2);
+            $$ = new Unario('SOMA', $2, @$);
         }
     | PASSO '+' inteiro_literal
         {
-            $$ = new Unario('SOMA', $2);
+            $$ = new Unario('SOMA', $2, @$);
         }
     | PASSO '-' inteiro_literal
         {
-            $$ = new Unario('SUBTRAI', $2);
+            $$ = new Unario('SUBTRAI', $2, @$);
         }
     ;
 
 expressao
     : expressao OU expressao
         {
-            $$ = new Expressao('OU-LÓGICO', $1, $3);
+            $$ = new Expressao('OU-LÓGICO', $1, $3, @$);
         }
     | expressao E expressao
         {
-            $$ = new Expressao('E-LOGICO', $1, $3);
+            $$ = new Expressao('E-LOGICO', $1, $3, @$);
         }
     | expressao "|" expressao
         {
-            $$ = new Expressao('OU-BIT-A-BIT', $1, $3);
+            $$ = new Expressao('OU-BIT-A-BIT', $1, $3, @$);
         }
     | expressao "^" expressao
         {
-            $$ = new Expressao('OU-EXCLUSIVO-BIT-A-BIT', $1, $3);
+            $$ = new Expressao('OU-EXCLUSIVO-BIT-A-BIT', $1, $3, @$);
         }
     | expressao "&" expressao
         {
-            $$ = new Expressao('E-BIT-A-BIT', $1, $3);
+            $$ = new Expressao('E-BIT-A-BIT', $1, $3, @$);
         }
     | expressao "=" expressao
         {
-            $$ = new Expressao('COMPARA-IGUALDADE', $1, $3);
+            $$ = new Expressao('COMPARA-IGUALDADE', $1, $3, @$);
         }
     | expressao DIFERENTE expressao
         {
-            $$ = new Expressao('COMPARA-DIFERENCA', $1, $3);
+            $$ = new Expressao('COMPARA-DIFERENCA', $1, $3, @$);
         }
     | expressao ">" expressao
         {
-            $$ = new Expressao('COMPARA-MAIOR', $1, $3);
+            $$ = new Expressao('COMPARA-MAIOR', $1, $3, @$);
         }
     | expressao MAIORIGUAL expressao
         {
-            $$ = new Expressao('COMPARA-MAIOR-IGUAL', $1, $3);
+            $$ = new Expressao('COMPARA-MAIOR-IGUAL', $1, $3, @$);
         }
     | expressao "<" expressao
         {
-            $$ = new Expressao('COMPARA-MENOR', $1, $3);
+            $$ = new Expressao('COMPARA-MENOR', $1, $3, @$);
         }
     | expressao MENORIGUAL expressao
         {
-            $$ = new Expressao('COMPARA-MENOR-IGUAL', $1, $3);
+            $$ = new Expressao('COMPARA-MENOR-IGUAL', $1, $3, @$);
         }
     | expressao "+" expressao
         {
-            $$ = new Expressao('SOMA', $1, $3);
+            $$ = new Expressao('SOMA', $1, $3, @$);
         }
     | expressao "-" expressao
         {
-            $$ = new Expressao('SUBTRAI', $1, $3);
+            $$ = new Expressao('SUBTRAI', $1, $3, @$);
         }
     | expressao "/" expressao
         {
-            $$ = new Expressao('DIVIDE', $1, $3);
+            $$ = new Expressao('DIVIDE', $1, $3, @$);
         }
     | expressao "*" expressao
         {
-            $$ = new Expressao('MULTIPLICA', $1, $3);
+            $$ = new Expressao('MULTIPLICA', $1, $3, @$);
         }
     | expressao "%" expressao
         {
-            $$ = new Expressao('RESTO', $1, $3);
+            $$ = new Expressao('RESTO', $1, $3, @$);
         }
     | "+" termo
         {
-            $$ = new Unario('POSITIVO', $2);
+            $$ = new Unario('POSITIVO', $2, @$);
         }
     | "-" termo
         {
-            $$ = new Unario('NEGATIVO', $2);
+            $$ = new Unario('NEGATIVO', $2, @$);
         }
     | "~" termo
         {
-            $$ = new Unario('NAO-BINARIO', $2);
+            $$ = new Unario('NAO-BINARIO', $2, @$);
         }
     | NAO termo
         {
-            $$ = new Unario('NAO-LOGICO', $2);
+            $$ = new Unario('NAO-LOGICO', $2, @$);
         }
     | termo
         {
@@ -716,7 +730,8 @@ chamada_funcao
             $$ = {
                 op: 'CHAMADA-FUNCAO',
                 nome: $1,
-                argumentos: $3
+                argumentos: $3,
+                local: @$
             }
         }
     ;
@@ -777,7 +792,8 @@ declaracao_funcao
                 parametros: $4,
                 tipo: $6,
                 variaveis: $7,
-                corpo: $8
+                corpo: $8,
+                local: @$
             }
         }
     ;
@@ -821,14 +837,17 @@ parametro
         {
             $$ = {
                 nome: $1,
-                tipo: $3
+                tipo: $3,
+                local: @$
             }
         }
     | variavel ':' tipo_matriz
         {
             $$ = {
                 nome: $1,
-                tipo: $3
+                tipo: $3.tipo,
+                dimensoes: $3.dimensoes,
+                local: @$
             }
         }
     ;

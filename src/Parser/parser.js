@@ -95,7 +95,8 @@ case 2:
             nome: $$[$0-3],
             variaveis: $$[$0-2],
             corpo: $$[$0-1],
-            funcoes: $$[$0]
+            funcoes: $$[$0],
+            local: this._$
         }
     
 break;
@@ -122,7 +123,8 @@ case 9:
         this.$ = {
             variaveis: $$[$0-3],
             tipo: $$[$0-1].tipo,
-            dimensoes: $$[$0-1].dimensoes
+            dimensoes: $$[$0-1].dimensoes,
+            local: this._$
         }
     
 break;
@@ -130,7 +132,8 @@ case 10:
 
             this.$ = {
                 variaveis: $$[$0-3],
-                tipo: $$[$0-1]
+                tipo: $$[$0-1],
+                local:this._$
             }
         
 break;
@@ -173,7 +176,8 @@ case 18:
 
             this.$ = {
                 dimensoes: $$[$0-2],
-                tipo: $$[$0]
+                tipo: $$[$0],
+                local: this._$
             }
         
 break;
@@ -221,7 +225,8 @@ break;
 case 39:
 
             this.$ = {
-                acao: 'RETORNE'
+                acao: 'RETORNE',
+                local: this._$
             };
         
 break;
@@ -229,7 +234,8 @@ case 40:
 
             this.$ = {
                 acao: 'RETORNE',
-                expressao: $$[$0-1]
+                expressao: $$[$0-1],
+                local: this._$
             }
         
 break;
@@ -242,7 +248,8 @@ case 42:
 
             this.$ = {
                 valor: $$[$0-1],
-                indices: $$[$0]
+                indices: $$[$0],
+                local: this._$
             }
         
 break;
@@ -250,7 +257,8 @@ case 45:
    
             this.$ = {
                 esquerda: $$[$0-3],
-                direita: $$[$0-1]
+                direita: $$[$0-1],
+                local: this._$
             }
         
 break;
@@ -258,7 +266,8 @@ case 46:
 
             this.$ = {
                 esquerda: $$[$0-3],
-                direita: $$[$0-1]
+                direita: $$[$0-1],
+                local: this._$
             }
         
 break;
@@ -267,7 +276,8 @@ case 47:
             this.$ = {
                 acao: 'SE',
                 condicao: $$[$0-3],
-                corpo: $$[$0-1]
+                corpo: $$[$0-1],
+                local: this._$
             }
         
 break;
@@ -277,7 +287,8 @@ case 48:
                 acao: 'SE',
                 condicao: $$[$0-5],
                 corpo: $$[$0-3],
-                senao: $$[$0-1]
+                senao: $$[$0-1],
+                local: this._$
             }
         
 break;
@@ -286,7 +297,8 @@ case 49:
             this.$ = {
                 acao: 'ENQUANTO',
                 condicao: $$[$0-3],
-                corpo: $$[$0-1]
+                corpo: $$[$0-1],
+                local: this._$
             }
         
 break;
@@ -298,7 +310,8 @@ case 50: case 51:
                 de: $$[$0-6],
                 ate: $$[$0-4],
                 passo: $$[$0-3],
-                corpo: $$[$0-1]
+                corpo: $$[$0-1],
+                local: this._$
             }
         
 break;
@@ -309,117 +322,117 @@ case 52:
 break;
 case 53:
 
-            this.$ = new Unario('SOMA', $$[$0]);
+            this.$ = new Unario('SOMA', $$[$0], this._$);
         
 break;
 case 54:
 
-            this.$ = new Unario('SOMA', $$[$0-1]);
+            this.$ = new Unario('SOMA', $$[$0-1], this._$);
         
 break;
 case 55:
 
-            this.$ = new Unario('SUBTRAI', $$[$0-1]);
+            this.$ = new Unario('SUBTRAI', $$[$0-1], this._$);
         
 break;
 case 56:
 
-            this.$ = new Expressao('OU-LÓGICO', $$[$0-2], $$[$0]);
+            this.$ = new Expressao('OU-LÓGICO', $$[$0-2], $$[$0], this._$);
         
 break;
 case 57:
 
-            this.$ = new Expressao('E-LOGICO', $$[$0-2], $$[$0]);
+            this.$ = new Expressao('E-LOGICO', $$[$0-2], $$[$0], this._$);
         
 break;
 case 58:
 
-            this.$ = new Expressao('OU-BIT-A-BIT', $$[$0-2], $$[$0]);
+            this.$ = new Expressao('OU-BIT-A-BIT', $$[$0-2], $$[$0], this._$);
         
 break;
 case 59:
 
-            this.$ = new Expressao('OU-EXCLUSIVO-BIT-A-BIT', $$[$0-2], $$[$0]);
+            this.$ = new Expressao('OU-EXCLUSIVO-BIT-A-BIT', $$[$0-2], $$[$0], this._$);
         
 break;
 case 60:
 
-            this.$ = new Expressao('E-BIT-A-BIT', $$[$0-2], $$[$0]);
+            this.$ = new Expressao('E-BIT-A-BIT', $$[$0-2], $$[$0], this._$);
         
 break;
 case 61:
 
-            this.$ = new Expressao('COMPARA-IGUALDADE', $$[$0-2], $$[$0]);
+            this.$ = new Expressao('COMPARA-IGUALDADE', $$[$0-2], $$[$0], this._$);
         
 break;
 case 62:
 
-            this.$ = new Expressao('COMPARA-DIFERENCA', $$[$0-2], $$[$0]);
+            this.$ = new Expressao('COMPARA-DIFERENCA', $$[$0-2], $$[$0], this._$);
         
 break;
 case 63:
 
-            this.$ = new Expressao('COMPARA-MAIOR', $$[$0-2], $$[$0]);
+            this.$ = new Expressao('COMPARA-MAIOR', $$[$0-2], $$[$0], this._$);
         
 break;
 case 64:
 
-            this.$ = new Expressao('COMPARA-MAIOR-IGUAL', $$[$0-2], $$[$0]);
+            this.$ = new Expressao('COMPARA-MAIOR-IGUAL', $$[$0-2], $$[$0], this._$);
         
 break;
 case 65:
 
-            this.$ = new Expressao('COMPARA-MENOR', $$[$0-2], $$[$0]);
+            this.$ = new Expressao('COMPARA-MENOR', $$[$0-2], $$[$0], this._$);
         
 break;
 case 66:
 
-            this.$ = new Expressao('COMPARA-MENOR-IGUAL', $$[$0-2], $$[$0]);
+            this.$ = new Expressao('COMPARA-MENOR-IGUAL', $$[$0-2], $$[$0], this._$);
         
 break;
 case 67:
 
-            this.$ = new Expressao('SOMA', $$[$0-2], $$[$0]);
+            this.$ = new Expressao('SOMA', $$[$0-2], $$[$0], this._$);
         
 break;
 case 68:
 
-            this.$ = new Expressao('SUBTRAI', $$[$0-2], $$[$0]);
+            this.$ = new Expressao('SUBTRAI', $$[$0-2], $$[$0], this._$);
         
 break;
 case 69:
 
-            this.$ = new Expressao('DIVIDE', $$[$0-2], $$[$0]);
+            this.$ = new Expressao('DIVIDE', $$[$0-2], $$[$0], this._$);
         
 break;
 case 70:
 
-            this.$ = new Expressao('MULTIPLICA', $$[$0-2], $$[$0]);
+            this.$ = new Expressao('MULTIPLICA', $$[$0-2], $$[$0], this._$);
         
 break;
 case 71:
 
-            this.$ = new Expressao('RESTO', $$[$0-2], $$[$0]);
+            this.$ = new Expressao('RESTO', $$[$0-2], $$[$0], this._$);
         
 break;
 case 72:
 
-            this.$ = new Unario('POSITIVO', $$[$0]);
+            this.$ = new Unario('POSITIVO', $$[$0], this._$);
         
 break;
 case 73:
 
-            this.$ = new Unario('NEGATIVO', $$[$0]);
+            this.$ = new Unario('NEGATIVO', $$[$0], this._$);
         
 break;
 case 74:
 
-            this.$ = new Unario('NAO-BINARIO', $$[$0]);
+            this.$ = new Unario('NAO-BINARIO', $$[$0], this._$);
         
 break;
 case 75:
 
-            this.$ = new Unario('NAO-LOGICO', $$[$0]);
+            this.$ = new Unario('NAO-LOGICO', $$[$0], this._$);
         
 break;
 case 82:
@@ -427,7 +440,8 @@ case 82:
             this.$ = {
                 op: 'CHAMADA-FUNCAO',
                 nome: $$[$0-3],
-                argumentos: $$[$0-1]
+                argumentos: $$[$0-1],
+                local: this._$
             }
         
 break;
@@ -458,15 +472,27 @@ case 93:
                 parametros: $$[$0-4],
                 tipo: $$[$0-2],
                 variaveis: $$[$0-1],
-                corpo: $$[$0]
+                corpo: $$[$0],
+                local: this._$
             }
         
 break;
-case 100: case 101:
+case 100:
 
             this.$ = {
                 nome: $$[$0-2],
-                tipo: $$[$0]
+                tipo: $$[$0],
+                local: this._$
+            }
+        
+break;
+case 101:
+
+            this.$ = {
+                nome: $$[$0-2],
+                tipo: $$[$0].tipo,
+                dimensoes: $$[$0].dimensoes,
+                local: this._$
             }
         
 break;

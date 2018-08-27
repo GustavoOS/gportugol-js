@@ -19,14 +19,15 @@ function TypeCheck(ast) {
     this.declareVariables = function (variables = this.ast.variaveis, scope = this.ast.nome) {
         variables.forEach(variableDeclaration => {
             variableDeclaration.variaveis.forEach((variable) => {
-                this.SymbolTable.declareVariable(variable, scope, variableDeclaration.tipo, variableDeclaration.dimensoes);
+                console.log(variableDeclaration);
+                this.SymbolTable.declareVariable(variable, scope, variableDeclaration.tipo, variableDeclaration.dimensoes, variableDeclaration.local);
             });
         });
     };
 
-    this.declareParameters = function(funcao){
-        funcao.parametros.forEach((p)=>{
-            this.SymbolTable.declareVariable(p.nome, funcao.nome, p.tipo);
+    this.declareParameters = function (funcao) {
+        funcao.parametros.forEach((p) => {
+            this.SymbolTable.declareVariable(p.nome, funcao.nome, p.tipo, p.dimensoes, p.local);
         });
     };
 }
