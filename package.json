@@ -30,7 +30,9 @@
     "url": "https://github.com/GustavoOS/gportugol-js/issues"
   },
   "homepage": "https://github.com/GustavoOS/gportugol-js#readme",
-  "dependencies": {},
+  "dependencies": {
+    "jison": "^0.4.18"
+  },
   "devDependencies": {
     "jasmine": "^3.2.0",
     "jasmine-core": "^3.2.0",
