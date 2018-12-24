@@ -1,10 +1,12 @@
 var parser = require("../src/Parser/parser").parser;
-var fs = require('fs');
+var FileReader = require("./file-reader");
 
 module.exports.Analysis = Analysis;
 
-function Analysis (inputPath = "./examples/fatorial-recursivo.gpt", encoding = "utf-8") {
-    this.input = fs.readFileSync(inputPath, encoding);
+
+
+function Analysis (input = (new FileReader()).read()) {
+    this.input = input;
     this.analyse = function () {
         this.ast = parser.parse(this.input);
     };
