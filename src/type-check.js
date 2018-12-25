@@ -6,7 +6,9 @@ var SymbolTable = st.SymbolTable;
 function TypeCheck(ast) {
     this.ast = ast;
     this.SymbolTable = new SymbolTable(ast.nome);
-    this.execute = function () {};
+    this.execute =  () => {
+        this.createScopesAndDeclareVariables();
+    };
     this.createScopesAndDeclareVariables = function () {
         this.SymbolTable.declareScope();
         this.declareVariables();
