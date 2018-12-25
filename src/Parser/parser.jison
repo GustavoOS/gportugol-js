@@ -1,6 +1,6 @@
 %{
     // var util = require('util');
-    var data_structure = require('./data-structure.js');
+    var data_structure = require('src/Parser/data-structure.js');
     var Expressao = data_structure.Expressao;
     var Unario = data_structure.Unario;
     const Tipos = data_structure.Tipos;
